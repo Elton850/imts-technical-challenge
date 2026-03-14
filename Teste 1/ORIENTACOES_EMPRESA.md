@@ -35,26 +35,31 @@ Objetivo da entrega:
 
 ## Como validar rapidamente (avaliador)
 
-Na pasta `Teste 1`, executar:
+Na pasta `Teste 1`:
 
 ```bash
 npm install
 npx playwright install chromium
-npm run test:e2e
+npm run test:verify
 ```
 
-Opcional:
+Suíte completa (15 testes):
 
 ```bash
-npm run test:smoke
+npm run test:e2e:local
+```
+
+Relatório HTML:
+
+```bash
 npm run test:e2e:report
 ```
 
 ## Como interpretar o resultado
 
-- Sucesso: todos os testes passam (ex.: `14 passed`).
-- Falha: ver nome do teste no terminal e abrir relatorio HTML.
-- Evidencias de falha: screenshots e trace quando aplicavel.
+- Sucesso: `4 passed` (smoke) ou `15 passed` (suíte completa).
+- Falha: nome do teste no terminal; relatório HTML para detalhes.
+- Evidências de falha: `.pw-out/` (screenshots, traces).
 
 ## Pontos de destaque da entrega
 

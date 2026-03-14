@@ -2,6 +2,9 @@
   "name": "teste1-calculadora-cidadao",
   "version": "1.0.0",
   "description": "Automacao E2E da Calculadora do Cidadao - BCB - Teste 1",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "test:e2e": "playwright test",
     "test:e2e:local": "playwright test",

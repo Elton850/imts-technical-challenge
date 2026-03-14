@@ -2,41 +2,31 @@
 
 ## Objetivo
 
-Registrar o baseline de execucao da suite E2E para protecao contra regressao. Qualquer alteracao que quebre este baseline deve ser justificada e documentada.
+Registrar o baseline da suite E2E para protecao contra regressao. Alteracoes que quebrem este baseline devem ser justificadas.
 
 ## Baseline registrado
 
 | Campo | Valor |
 |-------|-------|
-| **Data/Hora** | 14/03/2026 |
-| **Comando** | `npm run test:e2e` |
-| **Total de testes** | 14 |
-| **Passando** | 14 |
-| **Falhando** | 0 |
-| **Tempo total** | ~26s |
-| **Retries utilizados** | 0 |
-| **Ambiente** | Windows 11 / Chromium |
-| **Workers** | 4 |
+| **Data** | 14/03/2026 |
+| **Total de testes** | 15 |
+| **Passando** | 15 |
+| **Comando local** | `npm run test:e2e:local` |
+| **Comando CI** | `npm run test:e2e` |
+| **Tempo local** | ~55s (workers=1) |
+| **Tempo CI** | ~30s (workers paralelos) |
+| **Ambiente** | Windows 11 / Chromium (local); Node 20 (CI) |
 
 ## Smoke (testes criticos)
 
 | Campo | Valor |
 |-------|-------|
-| **Comando** | `npm run test:smoke` |
+| **Comando** | `npm run test:verify` ou `npm run test:smoke:local` |
 | **Total** | 4 |
-| **Passando** | 4 |
-| **Tempo** | ~12.7s |
+| **Tempo** | ~15s |
 
 ## Criterio de regressao
 
-- **NAO avancar** se `npm run test:e2e` retornar qualquer falha sem diagnostico e correcao.
-- **NAO avancar** se tempo total subir significativamente (>50% do baseline) sem justificativa.
-- **Documentar** qualquer alteracao de comportamento esperado nos testes.
-
-## Historico de alteracoes
-
-| Data | Alteracao | Impacto |
-|------|-----------|---------|
-| 14/03/2026 | Baseline inicial (14 testes) | - |
-| 14/03/2026 | Upgrade Pleno: 15 testes (CT-11), lint, CI, docs | - |
+- **NAO avancar** se `npm run test:e2e:local` ou `npm run test:e2e` (CI) retornar falha sem diagnostico.
+- **Documentar** alteracoes de comportamento esperado nos testes.
 

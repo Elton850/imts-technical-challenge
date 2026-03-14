@@ -73,6 +73,6 @@ Validar o formulario "Correcao de Valores" da Calculadora do Cidadao (BCB), cobr
 
 - Screenshot em caso de falha (configurado no playwright.config.ts).
 - Trace em caso de falha (configurado no playwright.config.ts).
-- Relatorio HTML do Playwright (gerado em `playwright-report/`).
-- Log com casos da massa CSV (pass/fail por linha na saida do terminal).
+- Artefatos de falha em `.pw-out/`; relatório HTML em `playwright-report/`.
+- Log com casos da massa CSV (pass/fail por linha na saída do terminal).
 

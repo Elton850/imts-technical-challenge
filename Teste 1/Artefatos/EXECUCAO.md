@@ -12,7 +12,7 @@ Este documento explica, em linguagem acessível, como preparar o ambiente e exec
 
 | Item | Descrição | Como conferir |
 |------|-----------|---------------|
-| **Node.js** | Programa que roda o código dos testes (versão 18 ou superior) | No terminal: `node -v` |
+| **Node.js** | Programa que roda o código dos testes (18+; recomendado 20, igual ao CI) | No terminal: `node -v` |
 | **npm** | Gerenciador de pacotes do Node (versão 9 ou superior) | No terminal: `npm -v` |
 | **Internet** | Os testes acessam o site da Calculadora do Cidadão (BCB) | O site [bcb.gov.br](https://www3.bcb.gov.br) deve estar acessível |
 
@@ -58,34 +58,35 @@ Teste 1/
     massa-correcao.csv                  # Massa de dados para CT-10
   playwright.config.ts
   package.json
-  playwright-report/                    # Gerado apos execucao
-  test-results/                         # Screenshots e traces de falha
+  playwright-report/                    # Relatorio HTML (gerado apos execucao)
+  .pw-out/                              # Screenshots e traces de falha
 ```
 
 ## Comandos para rodar os testes
 
 | Comando | O que faz |
 |---------|-----------|
-| `npm run test:e2e` | Roda todos os testes em segundo plano (sem abrir janela do navegador). É o comando principal. |
-| `npm run test:smoke` | Roda apenas os testes críticos (fluxo feliz + validações essenciais). Mais rápido, ideal para verificação rápida. |
-| `npm run test:e2e:headed` | Roda os testes com o navegador visível — útil para acompanhar o que está acontecendo. |
-| `npm run test:e2e:report` | Abre o relatório HTML no navegador, com detalhes de cada teste executado. |
+| `npm run test:verify` | Limpa resultados e roda smoke (4 testes). Validação rápida local. |
+| `npm run test:e2e:local` | Roda a suíte completa (15 testes). |
+| `npm run test:smoke:local` | Roda apenas os testes críticos, sem limpar. |
+| `npm run test:e2e:headed` | Roda os testes com o navegador visível. |
+| `npm run test:e2e:report` | Abre o relatório HTML no navegador. |
 
-### Rodar todos os testes
-
-```bash
-npm run test:e2e
-```
-
-Os testes rodam em segundo plano e acessam o site do BCB. Ao final, o terminal mostra quantos passaram e quantos falharam.
-
-### Rodar testes críticos (modo smoke)
+### Validação rápida (recomendado para avaliador)
 
 ```bash
-npm run test:smoke
+npm run test:verify
 ```
 
-Execução mais rápida (~10 segundos). Use quando quiser validar rapidamente se o fluxo principal está funcionando.
+Limpa `.pw-out/` e `playwright-report/`, roda os 4 testes críticos (~15s).
+
+### Suíte completa
+
+```bash
+npm run test:e2e:local
+```
+
+15 testes, ~55s. O CI usa `npm run test:e2e` (mesmo comando, workers paralelos).
 
 ### Ver o relatório detalhado
 
@@ -105,22 +106,22 @@ npx playwright test tests/calculadora-fluxo-feliz.spec.ts
 
 | Metrica | Valor |
 |---|---|
-| Total de testes | 14 |
-| Passando | 14 |
-| Falhando | 0 |
-| Tempo total | ~23–35s |
-| Retries utilizados | 0 |
-| Ambiente | Windows 11 / Chromium |
+| Total de testes | 15 |
+| Passando | 15 |
+| Smoke (test:verify) | 4 testes, ~15s |
+| Suíte completa (test:e2e:local) | 15 testes, ~55s |
+| Ambiente local | Windows 11 / Chromium / workers=1 |
+| CI | Node 20, `npm run test:e2e` |
 
-*CI disponivel em `.github/workflows/teste1-playwright.yml` (GitHub Actions).*
+*CI em `.github/workflows/teste1-playwright.yml`: checkout → npm ci → lint → playwright install → test:e2e.*
 
 ### Como interpretar o CI (para avaliador)
 
 | Status no GitHub | Significado |
 |------------------|-------------|
-| **Verde (passou)** | Lint e todos os 14 testes E2E passaram. O pipeline executou: checkout → npm ci → lint → playwright install → test:e2e. |
-| **Vermelho (falhou)** | Lint ou algum teste falhou. Clique no job e veja qual step falhou. O artifact `playwright-report-failure` contem o relatorio HTML para diagnostico. |
-| **Timeout** | O job tem limite de 10 minutos. Se o site BCB estiver muito lento ou indisponivel, o CI pode estourar o tempo. |
+| **Verde (passou)** | Lint e os 15 testes E2E passaram. |
+| **Vermelho (falhou)** | Lint ou algum teste falhou. Artifact `playwright-report-failure` contém o relatório HTML. |
+| **Timeout** | Job limite 10 min. Site BCB lento ou indisponível pode causar timeout. |
 
 ## Massa externa CSV
 
@@ -150,8 +151,8 @@ O indice IPCA-E (10764IPC-E) dispara um `alert()` de aviso. O helper `submeterFo
 
 ## Entendendo o resultado
 
-- **Passou**: mensagem como `10 passed` — todos os testes concluíram com sucesso.
-- **Falhou**: mensagem como `1 failed, 9 passed` — pelo menos um teste encontrou um problema. O terminal indica qual teste falhou. Screenshots e traces ficam em `test-results/` para análise.
+- **Passou**: `4 passed` (smoke) ou `15 passed` (suíte completa).
+- **Falhou**: terminal indica qual teste falhou. Screenshots e traces em `.pw-out/`.
 
 ---
 

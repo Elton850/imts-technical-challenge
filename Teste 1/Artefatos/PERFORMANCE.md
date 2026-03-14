@@ -18,15 +18,14 @@ Apresentar uma analise simples de performance do fluxo principal do formulario d
 
 ## Metricas observadas (14/03/2026)
 
-### Tempo de execucao da suite completa (3 rodadas)
+### Tempo de execucao da suite completa (15 testes)
 
-| Rodada | Total de testes | Tempo total | Media por teste |
-|--------|-----------------|-------------|-----------------|
-| 1 | 14 | 26.2s | 1.75s |
-| 2 | 14 | 26.1s | 1.74s |
-| 3 | 14 | 26.2s | 1.75s |
+| Ambiente | Tempo total | Observacao |
+|----------|-------------|------------|
+| Local (workers=1) | ~55s | Windows 11 / Chromium |
+| CI (workers paralelos) | ~30s | GitHub Actions / Node 20 |
 
-**Baseline**: ~26.2s | **Variacao**: <1% | **Ambiente**: Windows 11 / Chromium
+**Baseline local**: ~55s | **Variacao**: estável
 
 ### Tempo de resposta apos submit (fluxo feliz)
 
@@ -51,6 +50,6 @@ Apresentar uma analise simples de performance do fluxo principal do formulario d
 ## Evidencias
 
 - Data: 14/03/2026
-- Ambiente: Windows 11 / Chromium (Playwright v1.41)
+- Ambiente: Windows 11 / Chromium (Playwright v1.41+)
 - Relatorio: `playwright-report/index.html`
 

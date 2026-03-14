@@ -6,7 +6,7 @@
 
 ## Status geral
 
-A automacao E2E da Calculadora do Cidadao (BCB) esta **operacional e estavel**. A suite cobre 14 cenarios de teste (positivos, negativos e de borda), com execucao media de ~26 segundos e pipeline de CI configurado.
+A automacao E2E da Calculadora do Cidadao (BCB) esta **operacional e estavel**. A suite cobre 15 cenarios de teste (positivos, negativos e de borda), com execucao local ~55s e pipeline de CI configurado.
 
 ---
 

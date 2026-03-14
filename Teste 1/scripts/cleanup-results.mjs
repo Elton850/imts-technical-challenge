@@ -14,9 +14,6 @@ const ROOT = path.resolve(__dirname, '..');
 const DIRS_TO_CLEAN = [
   '.pw-out',
   '.pw-test-results',
-  '.pw-test-results-run2',
-  '.pw-test-results-run3',
-  '.pw-test-results-run4',
   'test-results',
   'playwright-report',
 ];
