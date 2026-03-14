@@ -1,121 +1,104 @@
-# Execução Rápida — Teste 1
+﻿# Execucao Rapida - Teste 1
 
-Guia objetivo para rodar os testes e interpretar o resultado. Ideal para avaliador que precisa validar a entrega rapidamente.
+Guia curto para validar a entrega rapidamente.
 
----
+## Pre-requisitos
 
-## Pré-requisitos
+Antes de rodar, verifique:
 
-Antes de rodar, confira se você tem:
-
-| Requisito | Como verificar |
+| Requisito | Como conferir |
 |-----------|----------------|
-| **Node.js** (18+; recomendado 20, igual ao CI) | Abra o terminal e digite: `node -v` |
-| **npm** (versão 9 ou superior) | Digite: `npm -v` |
-| **Acesso à internet** | O site da Calculadora do Cidadão (BCB) precisa estar acessível |
+| **Node.js** (18, 19 ou 20) | `node -v` |
+| **npm** (9+) | `npm -v` |
+| **Internet** | acesso ao site do BCB |
 
-Se `node -v` ou `npm -v` não funcionar, instale o Node.js em [nodejs.org](https://nodejs.org) (versão LTS).
+Importante:
 
----
+- Node 24+ pode causar `spawn EPERM` no Windows.
+- A versao recomendada e **Node 20**, igual ao CI.
+- Se usar `nvm`, rode `nvm use` dentro da pasta `Teste 1`.
 
 ## 3 comandos para rodar
 
-Abra o terminal na pasta **Teste 1** e execute na ordem:
+Na pasta `Teste 1`, execute:
 
-### 1. Instalar dependências
+### 1. Instalar dependencias
 
 ```bash
 npm install
 npx playwright install chromium
 ```
 
-*Espere terminar sem erro. Pode levar 1–2 minutos na primeira vez.*
-
-### 2. Rodar os testes
+### 2. Rodar a validacao rapida
 
 ```bash
 npm run test:verify
 ```
 
-*Limpa resultados anteriores e roda os testes críticos (smoke). Para a suíte completa: `npm run test:e2e:local`.*
+Esse comando:
 
-### 3. Ver o relatório (opcional)
+- valida o ambiente com `test:doctor`;
+- limpa artefatos antigos;
+- roda os 4 testes criticos.
+
+Para a suite completa:
+
+```bash
+npm run test:e2e:local
+```
+
+### 3. Abrir o relatorio
 
 ```bash
 npm run test:e2e:report
 ```
 
-*Abre o relatório HTML no navegador com detalhes de cada teste.*
-
----
-
-## Interpretação do resultado
+## Como interpretar o resultado
 
 ### Passou
 
-Você verá algo como:
+Voce vera algo como:
 
+```text
+4 passed (~15s)
+15 passed (~55s)
 ```
-  4 passed (~15s)   # test:verify (smoke)
-  15 passed (~55s)  # test:e2e:local (suíte completa)
-```
-
-- **passed** = todos os testes concluíram com sucesso.
-- O número entre parênteses é o tempo total aproximado.
 
 ### Falhou
 
-- **failed** = pelo menos um teste encontrou um problema.
-- O terminal mostrará qual teste falhou e em qual arquivo.
-- Screenshots e traces em `.pw-out/` para análise.
+- O terminal mostra qual teste falhou.
+- Em ambiente local, os artefatos ficam em `%TEMP%/imts-teste1-playwright/`.
+- No CI, o relatorio HTML fica como artifact.
 
----
+## Smoke
 
-## Modo smoke (testes críticos rápidos)
-
-O comando `test:verify` já inclui smoke. Para rodar só o smoke sem limpar:
+Para rodar apenas o smoke sem limpeza:
 
 ```bash
 npm run test:smoke:local
 ```
 
-Executa fluxo feliz e validações essenciais (4 testes, ~15s).
+## Erros comuns
 
----
-
-## Solução rápida para erros comuns
-
-| Erro | Causa provável | O que fazer |
+| Erro | Causa provavel | O que fazer |
 |------|----------------|-------------|
-| `node: command not found` ou `npm: command not found` | Node.js não instalado | Instale o Node.js LTS em [nodejs.org](https://nodejs.org) |
-| `playwright install` falhou | Problema de rede ou permissão | Tente novamente; em rede corporativa, verifique proxy/firewall |
-| `Timeout` nos testes | Site do BCB lento ou indisponível | Aguarde e rode de novo; o site governamental pode ter latência |
-| `ECONNREFUSED` ou `net::ERR_INTERNET_DISCONNECTED` | Sem internet ou site fora do ar | Verifique sua conexão e se [bcb.gov.br](https://www3.bcb.gov.br) está acessível |
-| Erro ao ler `massa-correcao.csv` | Arquivo CSV ausente ou coluna faltando | Verifique se `data/massa-correcao.csv` existe e tem as colunas: `valor`, `dataInicial`, `dataFinal`, `indice`, `resultadoEsperado`, `tipoCaso` |
-| Comando não encontrado | Executado fora da pasta Teste 1 | Navegue até `Teste 1` com `cd "Teste 1"` antes de rodar |
+| `[doctor] Bloqueadores: Node 24 detectado` | Node fora da faixa suportada | use Node 20 |
+| `spawn EPERM` | Node 24+ ou bloqueio do Windows/antivirus | use Node 20 e feche processos que segurem arquivos |
+| `playwright install` falhou | rede ou permissao | tente novamente |
+| `Timeout` | site do BCB lento | aguarde e rode de novo |
+| erro ao ler CSV | arquivo ausente ou coluna faltando | revise `data/massa-correcao.csv` |
+| comando nao encontrado | terminal fora da pasta | rode `cd "Teste 1"` |
 
----
+## CI
 
-## Estrutura mínima esperada
+O workflow em `.github/workflows/teste1-playwright.yml` usa:
 
-```
-Teste 1/
-  data/
-    massa-correcao.csv    ← obrigatório para o teste data-driven
-  tests/
-    *.spec.ts
-  package.json
-  playwright.config.ts
-```
-
----
-
-## CI (GitHub Actions)
-
-Pipeline em `.github/workflows/teste1-playwright.yml`: Node 20, `npm ci`, lint, `npx playwright install chromium`, `npm run test:e2e` (15 testes). Em falha, artifact `playwright-report` disponível.
-
----
+- Node 20
+- `npm ci`
+- `npm run lint`
+- `npx playwright install chromium`
+- `npm run test:e2e`
 
 ## Mais detalhes
 
-Para instruções completas de setup, scripts e troubleshooting técnico, consulte `Artefatos/EXECUCAO.md`.
+Consulte `Artefatos/EXECUCAO.md`.

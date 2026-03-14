@@ -1,21 +1,24 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 /**
- * Limpeza resiliente de diretórios de resultados Playwright no Windows.
- * Remove atributos read-only/hidden/system antes de apagar.
- * Usa retry com exponential backoff para contornar locks (OneDrive, antivírus, etc).
+ * Limpeza resiliente de resultados Playwright.
+ * Em ambiente local, remove tambem os artefatos salvos no diretorio temporario do sistema.
  */
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+const LOCAL_RUNTIME_DIR = path.join(os.tmpdir(), 'imts-teste1-playwright');
 
 const DIRS_TO_CLEAN = [
-  '.pw-out',
-  '.pw-test-results',
-  'test-results',
-  'playwright-report',
+  path.join(ROOT, '.pw-out'),
+  path.join(ROOT, '.pw-test-results'),
+  path.join(ROOT, 'test-results'),
+  path.join(ROOT, 'playwright-report'),
+  path.join(LOCAL_RUNTIME_DIR, 'artifacts'),
+  path.join(LOCAL_RUNTIME_DIR, 'report'),
 ];
 
 const MAX_RETRIES = 5;
@@ -55,21 +58,20 @@ async function removeRecursive(target, retries = MAX_RETRIES) {
     if (retries > 0) {
       await removeRecursive(target, retries - 1);
     } else {
-      console.warn(`[cleanup] Aviso: não foi possível remover ${target}: ${err.message}`);
+      console.warn(`[cleanup] Aviso: nao foi possivel remover ${target}: ${err.message}`);
     }
   }
 }
 
 async function main() {
-  console.log('[cleanup] Limpando diretórios de resultados...');
+  console.log('[cleanup] Limpando diretorios de resultados...');
   for (const dir of DIRS_TO_CLEAN) {
-    const full = path.join(ROOT, dir);
-    if (fs.existsSync(full)) {
-      await removeRecursive(full);
+    if (fs.existsSync(dir)) {
+      await removeRecursive(dir);
       console.log(`[cleanup] Removido: ${dir}`);
     }
   }
-  console.log('[cleanup] Concluído.');
+  console.log('[cleanup] Concluido.');
 }
 
 main().catch((e) => {

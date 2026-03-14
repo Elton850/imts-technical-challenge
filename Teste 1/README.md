@@ -45,7 +45,9 @@ Teste 1/
 |-- package.json
 |-- playwright.config.ts
 |-- scripts/
-|   `-- cleanup-results.mjs
+|   |-- doctor.mjs
+|   |-- cleanup-results.mjs
+|   `-- show-report.mjs
 |-- data/
 |   `-- massa-correcao.csv
 |-- tests/
@@ -88,7 +90,7 @@ A automacao foi montada com foco em simplicidade e manutencao.
 - As interacoes principais com a pagina ficam no Page Object `calculadora.page.ts`.
 - Os testes foram separados por comportamento para facilitar leitura.
 - O cenario com massa externa usa `data/massa-correcao.csv`.
-- A configuracao local foi adaptada para reduzir falhas de permissao e lock de arquivos no Windows.
+- A configuracao local foi adaptada para reduzir falhas de permissao e lock de arquivos no Windows, usando diretorio temporario do sistema para artefatos de execucao.
 
 ## Cenarios cobertos
 
@@ -107,12 +109,14 @@ O detalhamento completo esta em:
 
 ## Instalacao
 
-Node 18+ (recomendado 20, igual ao CI). Arquivo `.nvmrc` presente para nvm.
+**Node 18, 19 ou 20** (obrigatorio). Node 24+ causa spawn EPERM no Windows. Use `nvm use` (ha `.nvmrc`) ou instale Node 20 LTS.
 
 ```bash
 npm install
 npx playwright install chromium
 ```
+
+Antes de rodar: `npm run test:doctor` valida o ambiente.
 
 ## Como executar
 
@@ -146,8 +150,9 @@ npx playwright test tests/calculadora-fluxo-feliz.spec.ts
 
 | Comando | Uso |
 |---|---|
+| `npm run test:doctor` | valida Node e ambiente (falha se Node 24+) |
 | `npm run test:clean` | limpa diretorios de resultado |
-| `npm run test:verify` | validacao rapida local |
+| `npm run test:verify` | doctor + clean + smoke |
 | `npm run test:smoke:local` | roda apenas testes criticos |
 | `npm run test:e2e:local` | roda a suite completa |
 | `npm run test:e2e:report` | abre o relatorio HTML |
@@ -180,3 +185,4 @@ Se a avaliacao for curta, a melhor sequencia e:
 1. ler este arquivo;
 2. rodar `npm run test:verify`;
 3. consultar `Artefatos/CENARIOS.md` e `Artefatos/PRODUTO.md`.
+

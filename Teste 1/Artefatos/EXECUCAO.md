@@ -1,38 +1,33 @@
-# EXECUCAO
+﻿# EXECUCAO
 
 ## Objetivo
 
-Este documento explica, em linguagem acessível, como preparar o ambiente e executar os testes automatizados do Teste 1. Se você é avaliador e não tem experiência avançada com automação, este guia foi feito para você.
+Este documento explica como preparar o ambiente e executar os testes do Teste 1.
 
-> **Guia rápido**: Para uma versão ainda mais enxuta (3 comandos + interpretação do resultado), consulte `README_EXECUCAO_RAPIDA.md` na raiz do Teste 1.
+Para uma leitura mais curta, consulte `README_EXECUCAO_RAPIDA.md`.
 
----
+## Requisitos
 
-## O que você vai precisar
+| Item | Como conferir |
+|------|----------------|
+| **Node.js 18, 19 ou 20** | `node -v` |
+| **npm 9+** | `npm -v` |
+| **Internet** | acesso ao site do BCB |
 
-| Item | Descrição | Como conferir |
-|------|-----------|---------------|
-| **Node.js** | Programa que roda o código dos testes (18+; recomendado 20, igual ao CI) | No terminal: `node -v` |
-| **npm** | Gerenciador de pacotes do Node (versão 9 ou superior) | No terminal: `npm -v` |
-| **Internet** | Os testes acessam o site da Calculadora do Cidadão (BCB) | O site [bcb.gov.br](https://www3.bcb.gov.br) deve estar acessível |
+Observacoes:
 
-Se `node -v` ou `npm -v` retornar erro, instale o Node.js em [nodejs.org](https://nodejs.org) (versão LTS recomendada).
+- Node 24+ pode causar `spawn EPERM` no Windows.
+- A versao recomendada e **Node 20**, igual ao CI.
+- Ha arquivo `.nvmrc` na pasta do projeto.
 
----
+## Instalacao
 
-## Preparando o ambiente (primeira vez)
-
-Abra o terminal na pasta **Teste 1** e execute:
+Na pasta `Teste 1`:
 
 ```bash
 npm install
 npx playwright install chromium
 ```
-
-- **npm install**: baixa as dependências do projeto.
-- **npx playwright install chromium**: instala o navegador Chromium usado pelos testes.
-
-Aguarde a conclusão sem erros. Na primeira execução pode levar 1–2 minutos.
 
 ## Estrutura do projeto
 
@@ -46,125 +41,128 @@ Teste 1/
     RETROSPECTIVA.md
   tests/
     pages/
-      calculadora.page.ts               # Page Object da calculadora
-    helpers.ts                          # Utilitarios (delega ao POM)
-    calculadora-fluxo-feliz.spec.ts     # CT-01
-    calculadora-validacao-valor.spec.ts # CT-02
-    calculadora-regra-data.spec.ts      # CT-04
-    calculadora-borda.spec.ts           # CT-05, CT-06, CT-07
-    calculadora-validacao-indice.spec.ts# CT-08
-    calculadora-data-driven.spec.ts     # CT-10
+      calculadora.page.ts
+    helpers.ts
+    calculadora-fluxo-feliz.spec.ts
+    calculadora-validacao-valor.spec.ts
+    calculadora-regra-data.spec.ts
+    calculadora-borda.spec.ts
+    calculadora-validacao-indice.spec.ts
+    calculadora-data-driven.spec.ts
   data/
-    massa-correcao.csv                  # Massa de dados para CT-10
+    massa-correcao.csv
+  scripts/
+    doctor.mjs
+    cleanup-results.mjs
+    show-report.mjs
   playwright.config.ts
   package.json
-  playwright-report/                    # Relatorio HTML (gerado apos execucao)
-  .pw-out/                              # Screenshots e traces de falha
 ```
 
-## Comandos para rodar os testes
+## Comandos principais
 
-| Comando | O que faz |
-|---------|-----------|
-| `npm run test:verify` | Limpa resultados e roda smoke (4 testes). Validação rápida local. |
-| `npm run test:e2e:local` | Roda a suíte completa (15 testes). |
-| `npm run test:smoke:local` | Roda apenas os testes críticos, sem limpar. |
-| `npm run test:e2e:headed` | Roda os testes com o navegador visível. |
-| `npm run test:e2e:report` | Abre o relatório HTML no navegador. |
+| Comando | Uso |
+|---------|-----|
+| `npm run test:doctor` | valida Node e ambiente local |
+| `npm run test:clean` | limpa artefatos antigos |
+| `npm run test:verify` | doctor + clean + smoke |
+| `npm run test:smoke:local` | roda 4 testes criticos |
+| `npm run test:e2e:local` | roda a suite completa |
+| `npm run test:e2e:report` | abre o relatorio HTML local |
+| `npm run lint` | valida o codigo |
+| `npm run format:check` | valida formatacao |
 
-### Validação rápida (recomendado para avaliador)
+## Fluxo recomendado para avaliacao
+
+### Validacao rapida
 
 ```bash
 npm run test:verify
 ```
 
-Limpa `.pw-out/` e `playwright-report/`, roda os 4 testes críticos (~15s).
+Esse fluxo:
 
-### Suíte completa
+- valida o ambiente;
+- limpa artefatos antigos;
+- roda os 4 testes principais.
+
+### Suite completa
 
 ```bash
 npm run test:e2e:local
 ```
 
-15 testes, ~55s. O CI usa `npm run test:e2e` (mesmo comando, workers paralelos).
-
-### Ver o relatório detalhado
+### Relatorio HTML
 
 ```bash
 npm run test:e2e:report
 ```
 
-Abra este comando **após** rodar os testes. O relatório mostra cada teste, tempo de execução e evidências em caso de falha.
+## Resultado esperado
 
-### Rodar um teste específico
-
-```bash
-npx playwright test tests/calculadora-fluxo-feliz.spec.ts
-```
-
-## Resultado da execucao real
-
-| Metrica | Valor |
+| Metrica | Valor esperado |
 |---|---|
-| Total de testes | 15 |
-| Passando | 15 |
-| Smoke (test:verify) | 4 testes, ~15s |
-| Suíte completa (test:e2e:local) | 15 testes, ~55s |
-| Ambiente local | Windows 11 / Chromium / workers=1 |
-| CI | Node 20, `npm run test:e2e` |
+| Smoke | 4 testes |
+| Suite completa | 15 testes |
+| CI | Node 20 + `npm run test:e2e` |
 
-*CI em `.github/workflows/teste1-playwright.yml`: checkout → npm ci → lint → playwright install → test:e2e.*
+## CI
 
-### Como interpretar o CI (para avaliador)
+O workflow em `.github/workflows/teste1-playwright.yml` executa:
 
-| Status no GitHub | Significado |
-|------------------|-------------|
-| **Verde (passou)** | Lint e os 15 testes E2E passaram. |
-| **Vermelho (falhou)** | Lint ou algum teste falhou. Artifact `playwright-report-failure` contém o relatório HTML. |
-| **Timeout** | Job limite 10 min. Site BCB lento ou indisponível pode causar timeout. |
+1. `npm ci`
+2. `npm run lint`
+3. `npx playwright install chromium --with-deps`
+4. `npm run test:e2e`
 
-## Massa externa CSV
+## CSV data-driven
 
-O teste CT-10 usa dados de um arquivo CSV para rodar vários cenários de uma vez.
+O teste `CT-10` usa `data/massa-correcao.csv`.
 
-- **Arquivo**: `data/massa-correcao.csv`
-- **Colunas obrigatórias** (todas devem existir no cabeçalho):
-  - `valor` — valor monetário a ser corrigido
-  - `dataInicial` — data inicial no formato MM/YYYY
-  - `dataFinal` — data final no formato MM/YYYY
-  - `indice` — código do índice (ex.: 00433IPCA)
-  - `resultadoEsperado` — descrição do resultado esperado (informativo)
-  - `tipoCaso` — `valido` (sem erro esperado) ou `invalido` (erro esperado)
+Colunas obrigatorias:
 
-Antes de rodar os testes data-driven, o projeto valida automaticamente se o CSV existe e tem todas as colunas. Se faltar alguma coluna ou houver linha inválida, uma mensagem clara será exibida.
+- `valor`
+- `dataInicial`
+- `dataFinal`
+- `indice`
+- `resultadoEsperado`
+- `tipoCaso`
 
-## Decisoes tecnicas de implementacao
+O projeto valida o CSV antes da execucao.
 
-### Mascara de data (onkeydown)
-O campo de data usa mascara JavaScript `Mask("mm/yyyy", "date")` que auto-insere "/" apos os 2 digitos do mes. A solucao adotada foi digitar apenas os numeros (ex: "012023") via `pressSequentially`, deixando a mascara inserir o separador automaticamente. Digitar "01/2023" com a barra causava duplicacao ("01//").
+## Decisoes tecnicas
 
-### Campo indice vazio (CT-08)
-O select `#selIndice` nao possui opcao em branco por default. Para simular ausencia de selecao, o valor do select e forcado para string vazia via `page.evaluate()` antes da submissao.
+### Mascara de data
+
+A pagina usa mascara `mm/yyyy`. A automacao digita apenas os numeros e deixa a pagina inserir a barra.
+
+### Indice vazio
+
+Como o select nao tem opcao vazia, o teste usa `page.evaluate()` para simular ausencia de selecao.
 
 ### Dialogo IPCA-E
-O indice IPCA-E (10764IPC-E) dispara um `alert()` de aviso. O helper `submeterFormulario` registra um handler `page.once('dialog', ...)` que aceita automaticamente qualquer dialogo antes do clique no botao.
 
-## Entendendo o resultado
+Quando o site abre `alert()`, o teste aceita automaticamente antes do clique final.
 
-- **Passou**: `4 passed` (smoke) ou `15 passed` (suíte completa).
-- **Falhou**: terminal indica qual teste falhou. Screenshots e traces em `.pw-out/`.
+## Evidencias e artefatos
 
----
+- Em ambiente local, screenshots, traces e relatorio ficam em `%TEMP%/imts-teste1-playwright/`.
+- No CI, o relatorio HTML fica como artifact.
 
-## Solução de problemas comuns
+## Problemas comuns
 
-| Problema | Possível causa | O que tentar |
-|----------|----------------|--------------|
-| `node` ou `npm` não encontrado | Node.js não instalado | Instale o Node.js LTS em [nodejs.org](https://nodejs.org) |
-| Timeout nos testes | Site do BCB lento ou indisponível | Aguarde e rode novamente; o site governamental pode ter latência |
-| Erro de conexão (`ECONNREFUSED`, `ERR_INTERNET_DISCONNECTED`) | Sem internet ou site fora do ar | Verifique sua conexão e se [bcb.gov.br](https://www3.bcb.gov.br) está acessível |
-| Erro ao ler o arquivo CSV | Arquivo `data/massa-correcao.csv` ausente ou com coluna faltando | Verifique se o arquivo existe e tem as colunas: `valor`, `dataInicial`, `dataFinal`, `indice`, `resultadoEsperado`, `tipoCaso` |
-| Comando não encontrado | Terminal fora da pasta Teste 1 | Navegue até a pasta com `cd "Teste 1"` antes de rodar |
+| Problema | Acao recomendada |
+|----------|------------------|
+| `Node 24 detectado` | use Node 20 |
+| `spawn EPERM` | use Node 20 e feche processos que prendem arquivos |
+| timeout | tente novamente; o BCB e um sistema externo |
+| erro no CSV | revise colunas e arquivo |
 
-Para detalhes técnicos (timeout, seletores, máscara de data), consulte a seção "Decisoes tecnicas de implementacao" neste documento.
+## Leitura complementar
 
+- `README_EXECUCAO_RAPIDA.md`
+- `ORIENTACOES_EMPRESA.md`
+- `Artefatos/CENARIOS.md`
+- `Artefatos/PERFORMANCE.md`
+- `Artefatos/PRODUTO.md`
+- `Artefatos/RETROSPECTIVA.md`
