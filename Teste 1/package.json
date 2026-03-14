@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "teste1-calculadora-cidadao",
   "version": "1.0.0",
   "description": "Automacao E2E da Calculadora do Cidadao - BCB - Teste 1",
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.41.0",
+    "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "^8.57.0",
     "eslint": "^8.57.0",

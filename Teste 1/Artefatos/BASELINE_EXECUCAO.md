@@ -9,8 +9,8 @@ Registrar o baseline da suite E2E para protecao contra regressao. Alteracoes que
 | Campo | Valor |
 |-------|-------|
 | **Data** | 14/03/2026 |
-| **Total de testes** | 15 |
-| **Passando** | 15 |
+| **Total de testes** | 16 |
+| **Passando** | 16 |
 | **Comando local** | `npm run test:e2e:local` |
 | **Comando CI** | `npm run test:e2e` |
 | **Tempo local** | ~55s (workers=1) |
@@ -22,8 +22,8 @@ Registrar o baseline da suite E2E para protecao contra regressao. Alteracoes que
 | Campo | Valor |
 |-------|-------|
 | **Comando** | `npm run test:verify` ou `npm run test:smoke:local` |
-| **Total** | 4 |
-| **Tempo** | ~15s |
+| **Total** | 5 |
+| **Tempo** | ~18s |
 
 ## Criterio de regressao
 

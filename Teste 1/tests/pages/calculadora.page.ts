@@ -1,6 +1,6 @@
 /**
- * Page Object da Calculadora do Cidadao (BCB).
- * Encapsula interacoes reutilizaveis com o formulario de correcao de valores.
+ * Page Object do formulario "Correcao de Valores" da Calculadora do Cidadao (BCB).
+ * Centraliza navegacao, preenchimento, submissao e verificacao de erros.
  */
 import { Page } from '@playwright/test';
 import { SELECTORS } from '../selectors';
@@ -25,8 +25,8 @@ export class CalculadoraPage {
   }
 
   /**
-   * Preenche os campos do formulario.
-   * Campos nao informados sao ignorados (mantidos vazios ou com valor default).
+   * Preenche os campos do formulario conforme DadosFormulario.
+   * Campos omitidos permanecem vazios. Data: digita apenas digitos; a mascara mm/yyyy insere a barra.
    */
   async preencherFormulario(dados: DadosFormulario): Promise<void> {
     if (dados.indice !== undefined) {
@@ -53,8 +53,8 @@ export class CalculadoraPage {
   }
 
   /**
-   * Clica no botao "Corrigir valor" e aguarda a resposta da pagina.
-   * Aceita automaticamente qualquer dialogo de alerta (ex: IPCA-E).
+   * Submete o formulario e aguarda networkidle.
+   * Registra handler para dialogo (alert) antes do clique — IPCA-E dispara aviso.
    */
   async submeter(): Promise<void> {
     this.page.once('dialog', async (dialog) => {
@@ -64,7 +64,7 @@ export class CalculadoraPage {
     await this.page.waitForLoadState('networkidle');
   }
 
-  /** Retorna true se existe mensagem de erro visivel na pagina. */
+  /** Verifica se a classe .msgErro esta visivel (erro de validacao do sistema). */
   async temErroVisivel(): Promise<boolean> {
     const erros = this.page.locator(SELECTORS.MSG_ERRO);
     const count = await erros.count();
@@ -72,7 +72,7 @@ export class CalculadoraPage {
     return await erros.first().isVisible();
   }
 
-  /** Forca o select de indice para valor vazio (para CT-08). */
+  /** Define select e input de indice como vazios via evaluate (simula ausencia de selecao). */
   async forcarIndiceVazio(): Promise<void> {
     await this.page.evaluate(
       ({ selIndice, idIndice }) => {

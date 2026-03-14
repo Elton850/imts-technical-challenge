@@ -1,4 +1,4 @@
-﻿# EXECUCAO
+# EXECUCAO
 
 ## Objetivo
 
@@ -66,7 +66,7 @@ Teste 1/
 | `npm run test:doctor` | valida Node e ambiente local |
 | `npm run test:clean` | limpa artefatos antigos |
 | `npm run test:verify` | doctor + clean + smoke |
-| `npm run test:smoke:local` | roda 4 testes criticos |
+| `npm run test:smoke:local` | roda 5 testes criticos |
 | `npm run test:e2e:local` | roda a suite completa |
 | `npm run test:e2e:report` | abre o relatorio HTML local |
 | `npm run lint` | valida o codigo |
@@ -84,7 +84,7 @@ Esse fluxo:
 
 - valida o ambiente;
 - limpa artefatos antigos;
-- roda os 4 testes principais.
+- roda os 5 testes principais.
 
 ### Suite completa
 
@@ -102,8 +102,8 @@ npm run test:e2e:report
 
 | Metrica | Valor esperado |
 |---|---|
-| Smoke | 4 testes |
-| Suite completa | 15 testes |
+| Smoke | 5 testes |
+| Suite completa | 16 testes |
 | CI | Node 20 + `npm run test:e2e` |
 
 ## CI
@@ -153,8 +153,7 @@ Quando o site abre `alert()`, o teste aceita automaticamente antes do clique fin
 
 | Problema | Acao recomendada |
 |----------|------------------|
-| `Node 24 detectado` | use Node 20 |
-| `spawn EPERM` | use Node 20 e feche processos que prendem arquivos |
+| `spawn EPERM` ao rodar testes | use Node 20 (`nvm use` ou instale LTS) |
 | timeout | tente novamente; o BCB e um sistema externo |
 | erro no CSV | revise colunas e arquivo |
 

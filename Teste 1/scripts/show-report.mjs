@@ -1,4 +1,8 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
+/**
+ * Abre o relatorio HTML do Playwright no navegador.
+ * O relatorio e gerado em os.tmpdir()/imts-teste1-playwright/report (ambiente local).
+ */
 import os from 'os';
 import path from 'path';
 import { spawn } from 'child_process';

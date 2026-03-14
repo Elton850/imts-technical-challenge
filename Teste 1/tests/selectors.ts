@@ -1,6 +1,6 @@
 /**
- * Seletores criticos centralizados.
- * Alteracoes em um unico local facilitam manutencao.
+ * Seletores CSS e atributos do formulario da Calculadora do Cidadao.
+ * Centralizados para facilitar manutencao quando o HTML do BCB mudar.
  */
 export const SELECTORS = {
   FORM: '#corrigirPorIndiceForm',

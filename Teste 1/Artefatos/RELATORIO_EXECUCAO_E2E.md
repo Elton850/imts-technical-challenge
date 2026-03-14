@@ -8,8 +8,8 @@ Rastreabilidade cenario -> arquivo -> status -> evidencia.
 
 | Metrica | Valor |
 |---------|-------|
-| Total de testes | 15 |
-| Passando | 15 |
+| Total de testes | 16 |
+| Passando | 16 |
 | Tempo local | ~55s |
 | Ambiente | Windows 11 / Chromium |
 
@@ -17,22 +17,22 @@ Rastreabilidade cenario -> arquivo -> status -> evidencia.
 
 | Cenario | Arquivo spec | Evidencia em falha |
 |--------|--------------|--------------------|
-| CT-01 | `calculadora-fluxo-feliz.spec.ts` | `.pw-out/` |
-| CT-02 | `calculadora-validacao-valor.spec.ts` | `.pw-out/` |
-| CT-04 | `calculadora-regra-data.spec.ts` | `.pw-out/` |
-| CT-05, CT-06, CT-07, CT-11 | `calculadora-borda.spec.ts` | `.pw-out/` |
-| CT-08 | `calculadora-validacao-indice.spec.ts` | `.pw-out/` |
-| CT-10 | `calculadora-data-driven.spec.ts` | `.pw-out/` |
+| CT-01 | `calculadora-fluxo-feliz.spec.ts` | `%TEMP%/imts-teste1-playwright/` |
+| CT-02 | `calculadora-validacao-valor.spec.ts` | `%TEMP%/imts-teste1-playwright/` |
+| CT-03, CT-04 | `calculadora-regra-data.spec.ts` | `%TEMP%/imts-teste1-playwright/` |
+| CT-05, CT-06, CT-07, CT-11 | `calculadora-borda.spec.ts` | `%TEMP%/imts-teste1-playwright/` |
+| CT-08 | `calculadora-validacao-indice.spec.ts` | `%TEMP%/imts-teste1-playwright/` |
+| CT-10 | `calculadora-data-driven.spec.ts` | `%TEMP%/imts-teste1-playwright/` |
 
 ## Evidencia minima em falha
 
 - **Screenshot**: `screenshot: 'only-on-failure'` no config.
-- **Trace**: em `.pw-out/`; inspecao com `npx playwright show-trace`.
-- **Relatorio HTML**: `playwright-report/`.
+- **Trace**: em `%TEMP%/imts-teste1-playwright/`; inspecao com `npx playwright show-trace`.
+- **Relatorio HTML**: pasta temporaria (local) ou artifact (CI).
 
 ## Como interpretar
 
 1. **Pass**: criterio de aceite atendido.
-2. **Fail**: consultar `.pw-out/` e `playwright-report/`.
+2. **Fail**: consultar `%TEMP%/imts-teste1-playwright/` (local) ou artifact (CI).
 3. **Flaky**: verificar latencia do site BCB ou seletores.
 

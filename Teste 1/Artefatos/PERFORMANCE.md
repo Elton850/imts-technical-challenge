@@ -18,7 +18,7 @@ Apresentar uma analise simples de performance do fluxo principal do formulario d
 
 ## Metricas observadas (14/03/2026)
 
-### Tempo de execucao da suite completa (15 testes)
+### Tempo de execucao da suite completa (16 testes)
 
 | Ambiente | Tempo total | Observacao |
 |----------|-------------|------------|

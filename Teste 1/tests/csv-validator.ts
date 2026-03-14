@@ -1,6 +1,8 @@
+/// <reference types="node" />
 /**
- * Validação da massa CSV antes da execução dos testes data-driven.
- * Garante colunas obrigatórias e linhas válidas, com mensagens amigáveis.
+ * Valida o arquivo CSV da massa de correcao antes dos testes data-driven.
+ * Verifica existencia do arquivo, colunas obrigatorias e tipoCaso (valido/invalido) por linha.
+ * Retorna { ok, erro?, detalhes? } para exibicao de mensagens claras em falha.
  */
 import * as fs from 'fs';
 import * as path from 'path';
@@ -23,8 +25,8 @@ export interface ResultadoValidacao {
 }
 
 /**
- * Valida o arquivo CSV da massa de correção.
- * Retorna { ok: true } se válido, ou { ok: false, erro, detalhes } em caso de problema.
+ * Valida o arquivo CSV e retorna resultado estruturado.
+ * ok: true quando valido; ok: false com erro e detalhes quando ha problema.
  */
 export function validarMassaCSV(csvPath?: string): ResultadoValidacao {
   const basePath = csvPath ?? path.join(__dirname, '..', 'data', 'massa-correcao.csv');

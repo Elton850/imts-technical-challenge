@@ -1,11 +1,10 @@
 /**
  * CT-05, CT-06, CT-07 - Testes de borda
  *
- * CT-05: Valor zero - oraculo: sistema processa sem crash, sem .msgErro.
- * CT-06: Valor muito alto - oraculo: sistema nao quebra, sem .msgErro.
- * CT-07: Datas limite - oraculo: sistema processa sem crash (com ou sem .msgErro).
- *
- * CT-11 (negativo): Valor negativo - oraculo: sistema responde (rejeita ou aceita) sem crash.
+ * CT-05: valor zero -> sistema processa sem crash nem .msgErro.
+ * CT-06: valor muito alto -> sistema nao quebra.
+ * CT-07: datas limite (antigas/recentes) -> sistema processa sem crash.
+ * CT-11: valor negativo -> sistema responde de forma consistente (rejeita ou aceita).
  */
 import { test, expect } from '@playwright/test';
 import {

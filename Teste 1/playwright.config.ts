@@ -1,4 +1,4 @@
-﻿import os from 'os';
+import os from 'os';
 import path from 'path';
 import { defineConfig, devices } from '@playwright/test';
 
@@ -9,12 +9,13 @@ const reportDir = isLocal ? path.join(localRuntimeDir, 'report') : 'playwright-r
 
 export default defineConfig({
   testDir: './tests',
-  // Em ambiente local, os artefatos ficam fora da pasta sincronizada do OneDrive.
+  // Local: artefatos em os.tmpdir() para evitar EPERM em pastas sincronizadas (OneDrive).
+  // CI: artefatos no projeto para upload do relatorio.
   outputDir,
   timeout: 60000,
   expect: { timeout: 15000 },
   retries: process.env.CI ? 2 : 1,
-  workers: isLocal ? 1 : undefined,
+  workers: isLocal ? 1 : undefined, // workers=1 local: reduz spawn EPERM e lock no Windows
   reporter: [
     ['html', { open: 'never', outputFolder: reportDir }],
     ['list'],

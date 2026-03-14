@@ -1,4 +1,4 @@
-﻿# ORIENTACOES PARA A EMPRESA - TESTE 1
+# ORIENTACOES PARA A EMPRESA - TESTE 1
 
 ## Resumo executivo
 
@@ -60,7 +60,7 @@ npm run test:e2e:report
 
 ## Como interpretar o resultado
 
-- Sucesso: `4 passed` no smoke ou `15 passed` na suite completa.
+- Sucesso: `5 passed` no smoke ou `16 passed` na suite completa.
 - Falha: nome do teste no terminal e relatorio HTML para detalhes.
 - Evidencias locais: `%TEMP%/imts-teste1-playwright/`.
 - Evidencias no CI: artifact `playwright-report`.

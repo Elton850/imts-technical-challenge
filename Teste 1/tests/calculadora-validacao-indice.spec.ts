@@ -1,11 +1,9 @@
 /**
- * CT-08 - Validacao de indice nao selecionado
+ * CT-08 - Indice obrigatorio
  *
- * Cenario: submeter formulario sem selecionar um indice valido.
- * O valor do select e forçado para vazio via JS para simular ausencia de selecao.
- * Resultado esperado: mensagem de erro (.msgErro) visivel.
- *
- * Oraculo: .msgErro visivel com indicacao de indice invalido/nao cadastrado.
+ * Submete o formulario sem indice selecionado (valor do select forçado via evaluate).
+ * O select nao possui opcao vazia na UI; a ausencia e simulada por evaluate.
+ * Oraculo: .msgErro visivel.
  */
 import { test, expect } from '@playwright/test';
 import {

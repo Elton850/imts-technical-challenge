@@ -1,6 +1,6 @@
 /**
- * Helpers reutilizaveis - delega para CalculadoraPage.
- * Mantido para compatibilidade; novos testes podem usar CalculadoraPage diretamente.
+ * Helpers reutilizaveis que delegam ao CalculadoraPage.
+ * Facilita migracao gradual e mantem assinaturas estaveis para os specs.
  */
 import { Page } from '@playwright/test';
 import {
@@ -34,7 +34,7 @@ export async function temErroVisivel(page: Page): Promise<boolean> {
   return calc.temErroVisivel();
 }
 
-/** Forca o select de indice para valor vazio (CT-08). */
+/** Simula ausencia de selecao no indice via evaluate (select nao possui opcao vazia na UI). */
 export async function forcarIndiceVazio(page: Page): Promise<void> {
   const calc = new CalculadoraPage(page);
   await calc.forcarIndiceVazio();

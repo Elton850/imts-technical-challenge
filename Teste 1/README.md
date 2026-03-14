@@ -109,14 +109,14 @@ O detalhamento completo esta em:
 
 ## Instalacao
 
-**Node 18, 19 ou 20** (obrigatorio). Node 24+ causa spawn EPERM no Windows. Use `nvm use` (ha `.nvmrc`) ou instale Node 20 LTS.
+**Node 18, 19 ou 20** recomendado (igual ao CI). Node 24+ pode causar spawn EPERM no Windows — se ocorrer, use `nvm use` ou instale Node 20 LTS.
 
 ```bash
 npm install
 npx playwright install chromium
 ```
 
-Antes de rodar: `npm run test:doctor` valida o ambiente.
+`npm run test:doctor` emite avisos de ambiente (nao bloqueia).
 
 ## Como executar
 
@@ -150,7 +150,7 @@ npx playwright test tests/calculadora-fluxo-feliz.spec.ts
 
 | Comando | Uso |
 |---|---|
-| `npm run test:doctor` | valida Node e ambiente (falha se Node 24+) |
+| `npm run test:doctor` | emite avisos de Node/ambiente (nao bloqueia) |
 | `npm run test:clean` | limpa diretorios de resultado |
 | `npm run test:verify` | doctor + clean + smoke |
 | `npm run test:smoke:local` | roda apenas testes criticos |

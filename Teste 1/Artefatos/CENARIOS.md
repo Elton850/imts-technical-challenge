@@ -22,7 +22,7 @@ Validar o formulario "Correcao de Valores" da Calculadora do Cidadao (BCB), cobr
 |---|---|---|---|---|---|---|
 | CT-01 | Positivo | Correcao com dados validos | data inicial/final validas + valor valido + indice selecionado | Resultado calculado exibido sem erro | Alta | Implementado |
 | CT-02 | Negativo / Achado | Campo valor vazio | formulario sem valor monetario | **Achado: valor e opcional e sistema calcula sem erro** | Alta | Implementado |
-| CT-03 | Negativo | Data inicial invalida | formato invalido ou data impossivel | Mensagem de erro de data | Alta | Nao automatizado (coberto indiretamente) |
+| CT-03 | Negativo | Data inicial invalida | mes invalido (ex: 13) ou formato impossivel | Mensagem de erro de data | Alta | Implementado |
 | CT-04 | Negativo | Data final menor que inicial | data final anterior | Mensagem de erro de intervalo de datas | Alta | Implementado |
 | CT-05 | Borda | Valor zero | valor = 0 | Comportamento consistente | Media | Implementado |
 | CT-06 | Borda | Valor muito alto | valor maximo aceitavel | Sistema nao quebra | Media | Implementado |
@@ -52,6 +52,7 @@ Validar o formulario "Correcao de Valores" da Calculadora do Cidadao (BCB), cobr
 |---|---|
 | CT-01 | `tests/calculadora-fluxo-feliz.spec.ts` |
 | CT-02 | `tests/calculadora-validacao-valor.spec.ts` |
+| CT-03 | `tests/calculadora-regra-data.spec.ts` |
 | CT-04 | `tests/calculadora-regra-data.spec.ts` |
 | CT-05 | `tests/calculadora-borda.spec.ts` |
 | CT-06 | `tests/calculadora-borda.spec.ts` |
@@ -73,6 +74,6 @@ Validar o formulario "Correcao de Valores" da Calculadora do Cidadao (BCB), cobr
 
 - Screenshot em caso de falha (configurado no playwright.config.ts).
 - Trace em caso de falha (configurado no playwright.config.ts).
-- Artefatos de falha em `.pw-out/`; relatório HTML em `playwright-report/`.
+- Artefatos de falha em `%TEMP%/imts-teste1-playwright/` (local); relatorio HTML no CI.
 - Log com casos da massa CSV (pass/fail por linha na saída do terminal).
 

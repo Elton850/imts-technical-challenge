@@ -3,7 +3,7 @@
 ## Resumo da execucao
 
 **Data**: 14/03/2026
-**Resultado final**: 15/15 testes passando, suite estavel.
+**Resultado final**: 16/16 testes passando, suite estavel.
 
 Foco em cobertura funcional, estabilidade da automacao, descoberta de comportamento real e clareza da documentacao.
 
@@ -71,6 +71,6 @@ Foco em cobertura funcional, estabilidade da automacao, descoberta de comportame
 ## Pendencias ou limitacoes
 
 1. **Campo valor nao validado como obrigatorio**: o sistema aceita calculo sem valor informado. Registrado como oportunidade de melhoria (ver PRODUTO.md).
-2. **CT-03 nao automatizado**: data inicial invalida (formato); coberto indiretamente. CT-05, CT-06, CT-07 implementados.
+2. **CT-03 implementado**: data inicial com mes invalido (ex: 13) gera mensagem de erro.
 3. **Performance sem Lighthouse**: metrica de score Lighthouse nao coletada pois o site usa tecnologia legada que distorce os resultados. Substituido por medicao de tempo da suite Playwright.
 

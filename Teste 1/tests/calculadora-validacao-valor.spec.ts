@@ -1,18 +1,11 @@
 /**
- * CT-02 - Comportamento com campo valor vazio
+ * CT-02 - Campo valor vazio
  *
- * Cenario: submeter formulario sem preencher o campo de valor monetario.
+ * Submete o formulario sem preencher o campo de valor monetario.
  *
- * ACHADO DE PRODUTO (executado em 14/03/2026):
- * O campo "valor a ser corrigido" NAO e obrigatorio no sistema atual.
- * O formulario aceita a submissao sem valor e processa o calculo normalmente.
- * Isso diverge da expectativa documentada no CT-02 original (que esperava erro).
- *
- * O teste foi atualizado para refletir o comportamento REAL do sistema,
- * registrando este achado como oportunidade de melhoria de validacao.
- *
- * Oraculo atual: sistema aceita submissao sem valor (sem .msgErro).
- * Oportunidade: validar ou tornar obrigatorio o campo para melhor UX.
+ * Achado de produto: o sistema NAO valida obrigatoriedade do campo valor.
+ * O formulario aceita submissao sem valor e processa o calculo normalmente.
+ * Oraculo: sem .msgErro (comportamento real). Oportunidade: validar ou tornar obrigatorio.
  */
 import { test, expect } from '@playwright/test';
 import {
@@ -28,18 +21,16 @@ test.describe('CT-02 - Comportamento com campo valor vazio', () => {
   }) => {
     await abrirCalculadora(page);
 
-    // Preencher tudo exceto o campo valor
+    // Preenche indice e datas; valor omitido intencionalmente
     await preencherFormulario(page, {
       indice: '00433IPCA',
       dataInicial: '01/2022',
       dataFinal: '01/2023',
-      // valor: nao preenchido intencionalmente - teste de comportamento real
     });
 
     await submeterFormulario(page);
 
-    // Comportamento real observado: o sistema NAO exibe erro para valor vazio.
-    // O campo e tratado como opcional pelo servidor.
+    // Sistema atual trata o campo como opcional
     const houveErro = await temErroVisivel(page);
     expect(
       houveErro,
@@ -47,7 +38,7 @@ test.describe('CT-02 - Comportamento com campo valor vazio', () => {
         'Achado: validacao de obrigatoriedade ausente no campo valor.'
     ).toBe(false);
 
-    // Pagina deve continuar funcional no dominio BCB
+    // Pagina de resultado carregada
     expect(page.url()).toContain('bcb.gov.br');
   });
 });

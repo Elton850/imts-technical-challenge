@@ -1,9 +1,7 @@
 /**
- * CT-01 - Fluxo feliz: correcao com dados validos
+ * CT-01 - Fluxo feliz
  *
- * Cenario: preencher todos os campos obrigatorios com dados validos
- * e verificar que o sistema calcula e exibe resultado sem erros.
- *
+ * Preenche indice, datas e valor com dados validos e submete.
  * Oraculo: nenhuma mensagem de erro (.msgErro) visivel apos submit.
  */
 import { test, expect } from '@playwright/test';
@@ -21,7 +19,7 @@ test.describe('CT-01 - Fluxo feliz', () => {
     await abrirCalculadora(page);
 
     await preencherFormulario(page, {
-      indice: '00433IPCA', // IPCA (IBGE) - indice comum e disponivel
+      indice: '00433IPCA',
       dataInicial: '01/2020',
       dataFinal: '01/2023',
       valor: '1000',
@@ -34,7 +32,7 @@ test.describe('CT-01 - Fluxo feliz', () => {
       false
     );
 
-    // Verificar que ainda estamos em pagina do BCB (resultado carregado)
+    // Garante que a pagina de resultado foi carregada
     expect(page.url()).toContain('bcb.gov.br');
   });
 });

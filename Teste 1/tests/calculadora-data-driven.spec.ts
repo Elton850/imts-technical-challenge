@@ -1,23 +1,11 @@
+/// <reference types="node" />
 /**
- * CT-10 - Teste data-driven com massa externa CSV
+ * CT-10 - Teste data-driven com massa CSV
  *
- * Cenario: executar o formulario com multiplas combinacoes de dados lidas
- * de um arquivo CSV externo (data/massa-correcao.csv).
- * Cada linha da massa e executada independentemente.
- *
- * Colunas do CSV:
- *   valor        - valor monetario a ser corrigido
- *   dataInicial  - data inicial no formato MM/YYYY
- *   dataFinal    - data final no formato MM/YYYY
- *   indice       - valor do option no select (#selIndice)
- *   resultadoEsperado - descricao do resultado esperado (informativo)
- *   tipoCaso     - "valido" (sem .msgErro) ou "invalido" (com .msgErro)
- *
- * Oraculo por linha:
- *   tipoCaso == "valido"   -> .msgErro NAO visivel
- *   tipoCaso == "invalido" -> .msgErro visivel
- *
- * A massa CSV e validada antes da execucao (colunas obrigatorias, linhas validas).
+ * Executa o formulario para cada linha de data/massa-correcao.csv.
+ * Colunas: valor, dataInicial, dataFinal, indice, resultadoEsperado, tipoCaso.
+ * tipoCaso "valido" -> .msgErro nao visivel; "invalido" -> .msgErro visivel.
+ * O CSV e validado antes da execucao (colunas e tipoCaso por linha).
  */
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
@@ -39,6 +27,7 @@ interface LinhaMassa {
   tipoCaso: string;
 }
 
+/** Le o CSV e retorna array de objetos por linha (cabecalho mapeado para chaves). */
 function lerMassaCSV(): LinhaMassa[] {
   const csvPath = path.join(__dirname, '..', 'data', 'massa-correcao.csv');
   const conteudo = fs.readFileSync(csvPath, 'utf-8');

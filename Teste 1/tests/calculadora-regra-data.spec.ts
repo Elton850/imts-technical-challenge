@@ -1,11 +1,9 @@
 /**
- * CT-04 - Regra de data: data final menor que data inicial
+ * CT-03 / CT-04 - Validacao de datas
  *
- * Cenario: informar data final anterior a data inicial.
- * Resultado esperado: mensagem de erro (.msgErro visivel) indicando
- * intervalo de datas invalido.
- *
- * Oraculo: .msgErro visivel apos submit.
+ * CT-03: mes invalido (ex: 13) deve gerar .msgErro.
+ * CT-04: data final anterior a inicial deve gerar .msgErro.
+ * Regressao: apos erro, datas validas devem calcular normalmente.
  */
 import { test, expect } from '@playwright/test';
 import {
@@ -15,7 +13,27 @@ import {
   temErroVisivel,
 } from './helpers';
 
-test.describe('CT-04 - Regra de data', () => {
+test.describe('CT-03 / CT-04 - Regra de data', () => {
+  test('CT-03: deve bloquear calculo quando data inicial tem mes invalido (13)', async ({
+    page,
+  }) => {
+    await abrirCalculadora(page);
+
+    await preencherFormulario(page, {
+      indice: '00433IPCA',
+      dataInicial: '13/2023',
+      dataFinal: '01/2024',
+      valor: '1000',
+    });
+
+    await submeterFormulario(page);
+
+    const houveErro = await temErroVisivel(page);
+    expect(houveErro, 'Data inicial com mes invalido deve gerar mensagem de erro').toBe(
+      true
+    );
+  });
+
   test('deve bloquear calculo quando data final e anterior a data inicial', async ({
     page,
   }) => {
@@ -23,8 +41,8 @@ test.describe('CT-04 - Regra de data', () => {
 
     await preencherFormulario(page, {
       indice: '00433IPCA',
-      dataInicial: '06/2023', // data inicial mais recente
-      dataFinal: '01/2023', // data final mais antiga -> invalido
+      dataInicial: '06/2023',
+      dataFinal: '01/2023',
       valor: '1000',
     });
 
@@ -40,7 +58,7 @@ test.describe('CT-04 - Regra de data', () => {
   test('deve calcular corretamente com datas validas no mesmo cenario', async ({
     page,
   }) => {
-    // Teste de regressao: apos erro de data, sistema deve funcionar normalmente
+    // Regressao: apos erro de data, o sistema deve calcular normalmente com datas validas
     await abrirCalculadora(page);
 
     await preencherFormulario(page, {

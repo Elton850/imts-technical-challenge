@@ -1,4 +1,4 @@
-﻿# Execucao Rapida - Teste 1
+# Execucao Rapida - Teste 1
 
 Guia curto para validar a entrega rapidamente.
 
@@ -39,7 +39,7 @@ Esse comando:
 
 - valida o ambiente com `test:doctor`;
 - limpa artefatos antigos;
-- roda os 4 testes criticos.
+- roda os 5 testes criticos.
 
 Para a suite completa:
 
@@ -60,8 +60,8 @@ npm run test:e2e:report
 Voce vera algo como:
 
 ```text
-4 passed (~15s)
-15 passed (~55s)
+5 passed (~18s)   # smoke
+16 passed (~60s)  # suite completa
 ```
 
 ### Falhou
@@ -82,8 +82,7 @@ npm run test:smoke:local
 
 | Erro | Causa provavel | O que fazer |
 |------|----------------|-------------|
-| `[doctor] Bloqueadores: Node 24 detectado` | Node fora da faixa suportada | use Node 20 |
-| `spawn EPERM` | Node 24+ ou bloqueio do Windows/antivirus | use Node 20 e feche processos que segurem arquivos |
+| `spawn EPERM` ou falha ao iniciar Chromium | Node 24+ ou antivirus | use Node 20 (`nvm use` ou instale LTS) |
 | `playwright install` falhou | rede ou permissao | tente novamente |
 | `Timeout` | site do BCB lento | aguarde e rode de novo |
 | erro ao ler CSV | arquivo ausente ou coluna faltando | revise `data/massa-correcao.csv` |
