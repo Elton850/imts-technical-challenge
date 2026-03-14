@@ -1,0 +1,35 @@
+# Node / Playwright
+node_modules/
+Teste 1/node_modules/
+Teste 2/node_modules/
+
+# Playwright outputs
+playwright-report/
+test-results/
+blob-report/
+.pw-out/
+.pw-test-results*/
+Teste 1/playwright-report/
+Teste 1/test-results/
+Teste 1/test-results-run/
+Teste 1/.pw-out/
+Teste 1/.pw-test-results*/
+Teste 2/playwright-report/
+Teste 2/test-results/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

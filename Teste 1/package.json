@@ -1,0 +1,26 @@
+{
+  "name": "teste1-calculadora-cidadao",
+  "version": "1.0.0",
+  "description": "Automacao E2E da Calculadora do Cidadao - BCB - Teste 1",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:local": "playwright test",
+    "test:smoke": "playwright test tests/calculadora-fluxo-feliz.spec.ts tests/calculadora-regra-data.spec.ts tests/calculadora-validacao-indice.spec.ts",
+    "test:smoke:local": "playwright test tests/calculadora-fluxo-feliz.spec.ts tests/calculadora-regra-data.spec.ts tests/calculadora-validacao-indice.spec.ts",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report playwright-report",
+    "test:clean": "node scripts/cleanup-results.mjs",
+    "test:verify": "npm run test:clean && npm run test:smoke:local",
+    "lint": "eslint tests/ --ext .ts",
+    "format:check": "prettier --check tests/"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.41.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.10.0",
+    "prettier": "^3.8.1"
+  }
+}
