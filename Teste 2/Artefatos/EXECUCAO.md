@@ -1,9 +1,9 @@
-# EXECUCAO – AI Chat Insights (WhatsAnalizer)
+﻿# EXECUCAO – AI Chat Insights (WhatsAnalizer)
 
 ## 1. Como executar a aplicação localmente
 
 ### Pré-requisitos
-- Node.js 20.x ou superior
+- Node.js 20.x
 - npm 9.x ou superior
 
 ### Passos
@@ -29,6 +29,14 @@ O token **não** é armazenado em nenhum arquivo do projeto. Ele deve ser inform
 - Não crie `.env` com o token real
 - Não edite `environment.ts` com o token real
 - O campo aceita colagem direta do token (modo password com toggle de visibilidade)
+
+### Arquivo recomendado para avaliacao manual
+
+Para acelerar a avaliacao funcional da interface, o repositorio inclui um arquivo de conversa pronto:
+
+- `Teste 2/Artefatos/EXEMPLO_CONVERSA_AVALIACAO.txt`
+
+Esse exemplo foi pensado para exercitar melhor o produto, trazendo tarefas, prazos, riscos, conflitos e diferentes participantes em uma conversa mais rica que o fixture simples dos testes automatizados.
 
 ---
 
@@ -99,12 +107,12 @@ Todos os testes utilizam **mocks de rede** (sem chamadas reais à API Z.AI) para
 | Cenário | Arquivo | Testes |
 |---------|---------|--------|
 | CT-01 Estado vazio | 01-empty-state.spec.ts | 5 |
-| CT-02 Upload e análise | 02-upload-and-analyze.spec.ts | 6 |
+| CT-02 Upload e análise | 02-upload-and-analyze.spec.ts | 9 |
 | CT-03 Tratamento de erros | 03-error-handling.spec.ts | 5 |
 | CT-04 Filtro | 04-filter.spec.ts | 4 |
 | CT-05 Resposta parcial | 05-partial-response.spec.ts | 2 |
 | CT-06 CSV-driven | 06-filter-csv.spec.ts | 4 (dinâmico) |
-| **Total** | | **~26** |
+| **Total** | | **30** |
 
 ---
 
@@ -121,5 +129,5 @@ npm run build
 ## 6. Observações conhecidas
 
 - O Playwright sobe a aplicação automaticamente via `webServer` em `playwright.config.ts`; não é necessário rodar `npm start` antes dos E2E (incluindo CI).
-- Node.js 20.x ou superior recomendado; Angular 18 compatível com Node 20+.
+- Node.js 20.x recomendado; o projeto declara `engines` para a faixa 20.x.
 - O arquivo `package-lock.json` está preservado para reprodutibilidade.

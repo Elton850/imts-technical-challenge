@@ -1,4 +1,4 @@
-# DOCUMENTO_ENTREGA – Teste 2
+﻿# DOCUMENTO_ENTREGA – Teste 2
 
 ## 1. Como foi desenvolvido
 
@@ -10,7 +10,7 @@ A implementação seguiu a sequência: fundação técnica → arquitetura de es
 2. **Instalação de dependências:** PrimeNG 18, primeicons, @playwright/test
 3. **Modelos e constantes:** `ai-analysis.model.ts`, `ui-state.model.ts`, `zai.constants.ts`
 4. **Utilitários:** `analysis-normalizer.ts`, `error-mapper.ts`, `file-reader.util.ts`
-5. **Interceptor:** `zai.interceptor.ts` — impede JWT e loading global em chamadas Z.AI
+5. **Interceptor / contexto HTTP:** `zai.interceptor.ts` + `HttpContextToken` — marcam chamadas Z.AI com `SKIP_AUTH` e `SKIP_GLOBAL_LOADING`, preservando o Bearer definido pelo service e sinalizando opt-out para eventuais interceptors globais
 6. **Service:** `zai-analysis.service.ts` — monta requisição, aplica timeout, normaliza retorno
 7. **Componente principal:** `WhatsAnalizerComponent` com todo o template, signals e computed
 8. **Rota pública:** `/whatsanalizer` com lazy loading
@@ -32,17 +32,18 @@ A implementação seguiu a sequência: fundação técnica → arquitetura de es
 | Grupo | Signals | Finalidade |
 |-------|---------|------------|
 | Entrada | `systemPrompt`, `selectedModel`, `temperature`, `token`, `uploadedFile`, `chatText` | Dados informados pelo usuário |
-| Request | `isLoading`, `requestError` | Estado da chamada HTTP em andamento |
+| Request | `isLoading`, `requestError`, `retryCountdown` | Estado da chamada HTTP em andamento e janela curta de retentativa |
 | Domínio | `analysis` | Resultado normalizado da IA |
 | UI | `selectedParticipant` | Estado de interação do dashboard |
 
 ### Computed principais
 
-- `canAnalyze`: `chatText && token && !isLoading` — controla o botão
+- `canAnalyze`: `chatText && token && !isLoading && retryCountdown === 0` — controla o botão e respeita a janela curta de retentativa após falhas temporárias
 - `filteredTarefas`, `filteredPrazos`, `filteredRiscos`, `filteredConflitos`: filtro por participante (substring, case-insensitive) aplicado a cada lista
 - `participantOptions`: opções do dropdown de filtro derivadas dos participantes da análise
 - `sentimentTitle`: emoji + escala numérica derivados do índice de sentimento
 - `hasAnalysis`: flag booleana para controlar visibilidade do dashboard
+- `retryGuidanceMessage`: explica quando o usuário já pode tentar novamente sem reenviar o arquivo
 
 ---
 
@@ -77,7 +78,8 @@ A implementação seguiu a sequência: fundação técnica → arquitetura de es
 2. **Payload inválido:** qualquer falha no parse dispara erro `parse_error` com mensagem amigável
 3. **Timeout:** `timeout(150_000)` do RxJS — captura como `TimeoutError`, mapeia para mensagem clara
 4. **Rate limit:** status 429 ou `error.code === 1302` → mensagem com orientação de retry
-5. **Finalize:** `finalize()` garante que `isLoading` é desligado em qualquer desfecho (sucesso, erro, timeout)
+5. **Cooldown de retentativa:** timeout, rate limit, parse error e network iniciam janela curta de ~3 segundos antes de liberar novo clique
+6. **Finalize:** `finalize()` garante que `isLoading` é desligado em qualquer desfecho (sucesso, erro, timeout)
 
 ### Interceptor Z.AI
 
@@ -115,9 +117,10 @@ A implementação seguiu a sequência: fundação técnica → arquitetura de es
 | Arquivo vazio | FileReader rejeita antes do upload | Banner de erro imediato |
 | Token ausente | `canAnalyze` computed → botão desabilitado | Estado visual do botão |
 | Loading em andamento | `canAnalyze` computed → botão desabilitado | Estado visual do botão + spinner |
-| Timeout (2,5 min) | `TimeoutError` capturado, `finalize()` ativa | Banner com instrução de retry |
-| Rate limit (429 / 1302) | `mapHttpError` → mensagem amigável | Banner com instrução de retry |
-| JSON inválido da IA | Try/catch no parse → `parse_error` | Banner explicativo |
+| Timeout (2,5 min) | `TimeoutError` capturado, `finalize()` ativa | Banner com instrução de retry + cooldown curto |
+| Rate limit (429 / 1302) | `mapHttpError` → mensagem amigável | Banner com instrução de retry + cooldown curto |
+| JSON inválido da IA | Try/catch no parse → `parse_error` | Banner explicativo + cooldown curto |
+| Retry imediato após falha transitória | `retryCountdown` controla liberação do botão | Contagem regressiva visível por ~3s |
 | Payload parcial | Normalização com defaults seguros | Dashboard renderiza normalmente |
 | Requisição Z.AI com loading global | `SKIP_GLOBAL_LOADING` no contexto HTTP | Sem interferência no estado global |
 
@@ -128,7 +131,7 @@ A implementação seguiu a sequência: fundação técnica → arquitetura de es
 **Já implementado (incl. nesta entrega):**
 1. **Aviso de privacidade** — exibido quando há arquivo e token preenchidos; informa que o conteúdo é enviado à Z.AI e orienta a não usar dados sensíveis.
 2. **Exportação do resumo** — botão "Exportar resumo (.txt)" no card do resumo executivo; gera arquivo local com resumo, sentimento, KPIs e listas (sem token, sem conteúdo bruto do chat).
-3. **Empty state** — mensagem de que os dados não são armazenados no aplicativo; loading com hint "Isso pode levar até 2,5 min".
+3. **Empty state + guidance operacional** — mensagem de que os dados não são armazenados no aplicativo; loading com hint "Isso pode levar até 2,5 min"; orientação explícita de aguardar ~3 segundos em falhas temporárias.
 
 **Já implementado em sessões posteriores:** testes unitários para `analysis-normalizer.ts`, `error-mapper.ts`, `file-reader.util.ts`, `zai-analysis.service.ts` e interceptor Z.AI; webServer no Playwright para execução autônoma dos E2E.
 

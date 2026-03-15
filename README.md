@@ -1,12 +1,31 @@
-<p align="center">
+﻿<p align="center">
   <img src="https://images.squarespace-cdn.com/content/v1/5c4efc9770e802450d166f79/0cccc4a8-3e2e-40a9-a96e-817bcf996c20/Camada+1+2.png?format=2500w" alt="Logo IMTS" width="220" />
 </p>
 
 # Entrega Técnica IMTS
 
-[![Teste 1 - Playwright E2E](https://github.com/IMTS/repo/actions/workflows/teste1-playwright.yml/badge.svg)](https://github.com/IMTS/repo/actions/workflows/teste1-playwright.yml) *(substitua `IMTS/repo` pela URL real do repositório para ativar o badge)*
+[![Teste 1 - Playwright E2E](https://github.com/Elton850/imts-technical-challenge/actions/workflows/teste1-playwright.yml/badge.svg)](https://github.com/Elton850/imts-technical-challenge/actions/workflows/teste1-playwright.yml) [![Teste 2 - Angular CI](https://github.com/Elton850/imts-technical-challenge/actions/workflows/teste2-angular.yml/badge.svg)](https://github.com/Elton850/imts-technical-challenge/actions/workflows/teste2-angular.yml)
 
-Repositório com os dois desafios técnicos entregues: automação E2E (Teste 1) e desenvolvimento da aplicação AI Chat Insights (Teste 2), com artefatos de QA e testes Playwright.
+Repositorio com os dois desafios tecnicos entregues: automacao E2E em sistema externo (Teste 1) e desenvolvimento da aplicacao AI Chat Insights (Teste 2), com artefatos de QA, testes Playwright e CI.
+
+## Sobre mim
+
+Sou **Elton Alves**. Montei esta entrega com foco em clareza, qualidade tecnica, experiencia de avaliacao e manutencao de longo prazo.
+
+Mais sobre mim:
+
+- GitHub: [github.com/Elton850](https://github.com/Elton850)
+- LinkedIn: [linkedin.com/in/eltonalves-analytics](https://www.linkedin.com/in/eltonalves-analytics)
+- Portfólio: [elton850.github.io/portifolio](https://elton850.github.io/portifolio/)
+
+Gostei genuinamente de desenvolver os dois testes. O **Teste 1** foi interessante por exigir leitura de risco real em um sistema externo, conciliando automacao, estabilidade e analise de produto. O **Teste 2** foi o que eu mais gostei de fazer, por permitir trabalhar UX, robustez tecnica, tratamento de erro, qualidade visual e experiencia do usuario em um fluxo mais completo.
+
+Dificuldades principais que encontrei:
+
+- **Teste 1:** lidar com as variacoes de um sistema externo, manter a suite estavel no Windows e transformar a automacao em algo util tambem do ponto de vista de negocio.
+- **Teste 2:** equilibrar interface, experiencia do usuario, integracao com provedor externo, tratamento de instabilidades e testes determinísticos sem depender de token real.
+
+Meu objetivo aqui nao foi apenas "fazer funcionar", mas entregar algo profissional, legivel e agradavel de avaliar.
 
 ## Estrutura
 
@@ -51,81 +70,65 @@ cd ".\Teste 2\app"
 npm install
 npx playwright install chromium
 npm run build
+npx ng test --watch=false --browsers=ChromeHeadless
 npm run test:e2e
 ```
 
-Para rodar a aplicação do Teste 2 localmente: `npm start` (em `Teste 2/app`). A rota é `http://localhost:4200/whatsanalizer`.
+Para rodar a aplicacao do Teste 2 localmente: `npm start` (em `Teste 2/app`). A rota e `http://localhost:4200/whatsanalizer`.
 
-## Destaques além do solicitado
+## Diferenciais da entrega
 
-Itens que foram além do mínimo pedido em cada desafio, para facilitar avaliação e manutenção.
+O repositorio foi fechado para avaliacao rapida, reproducao local e continuidade tecnica.
 
 ### Teste 1
 
-- **CI com GitHub Actions** — workflow que roda os testes em push/PR e publica relatório em falha.
-- **Validação da massa CSV** — o arquivo de dados é validado (colunas e `tipoCaso`) antes da execução; falhas exibem mensagens objetivas.
-- **Scripts de apoio** — `doctor` (checagem de ambiente), `cleanup` (limpeza de resultados) e `show-report` (abertura do relatório HTML).
-- **Configuração para Windows** — artefatos do Playwright em diretório temporário do sistema, reduzindo EPERM em pastas sincronizadas (ex.: OneDrive).
-- **Achado documentado** — comportamento do campo “valor” (aceita envio vazio) registrado em PRODUTO com sugestão de melhoria.
-- **Guias extras** — `README_EXECUCAO_RAPIDA.md` e `ORIENTACOES_EMPRESA.md` para quem for rodar ou integrar o projeto.
+- **CI com GitHub Actions** para lint, execucao e publicacao de artefatos em falha.
+- **Validacao da massa CSV** antes da execucao, com mensagens objetivas para colunas e `tipoCaso`.
+- **Scripts de apoio** para diagnostico de ambiente, limpeza e abertura do relatorio HTML.
+- **Ajustes para Windows** com artefatos do Playwright em diretorio temporario, reduzindo `EPERM`.
+- **Achado de produto documentado** a partir de comportamento observado no sistema real.
+- **Matriz de risco de produto** conectando cenarios, scripts e impacto de negocio.
 
 ### Teste 2
 
-- **Seis cenários E2E** — um a mais que o mínimo; um deles com massa em CSV.
-- **Testes unitários** — cobertura para normalizer, error-mapper, file-reader, service e interceptor.
-- **E2E autônomo** — Playwright sobe a aplicação via `webServer`; não é preciso rodar `npm start` antes dos testes.
-- **Normalização defensiva** — resposta parcial ou inesperada da IA é tratada com defaults seguros, sem quebrar a UI.
-- **Segurança reforçada** — limite de 5 MB no upload; token nunca em log ou persistência; mensagens de erro sem expor corpo da API.
-- **Código documentado** — JSDoc e comentários nos pontos críticos para manutenção.
+- **CI dedicado** para build, testes unitarios headless e E2E.
+- **Seis cenarios E2E**, sendo um CSV-driven, alem da camada de testes unitarios.
+- **Execucao autonoma dos E2E** via `webServer`, sem `npm start` manual.
+- **Arquivo de conversa pronto para avaliacao manual** em `Teste 2/Artefatos/EXEMPLO_CONVERSA_AVALIACAO.txt`.
+- **Aviso de privacidade, exportacao de resumo e token fora de log ou persistencia.**
+- **Orientacao de processamento e retentativa** para explicar latencia esperada, falhas temporarias do provedor externo e janela segura de nova tentativa.
+- **Normalizacao defensiva** para payload parcial ou inesperado da IA, preservando a estabilidade da UI.
 
-## Análise: fatores de destaque (UAU)
+## Quick Evaluation Path
 
-Comparando o solicitado com o entregue em cada projeto:
+Para validar os dois projetos em poucos minutos:
 
-### Teste 1 — O que já é destaque
+```powershell
+# Teste 1 — lint, format e smoke
+cd ".\Teste 1"
+npm install
+npm run lint && npm run format:check && npm run test:verify
 
-| Solicitado | Entregue além |
-|------------|----------------|
-| Automação E2E + CSV + artefatos | **CI (GitHub Actions)** com lint, testes e artifact do relatório em falha |
-| Cenários mapeados | **Validação do CSV** antes de rodar (colunas + tipoCaso), com mensagens claras |
-| Documentação obrigatória | **Achado real** (campo valor aceita vazio) documentado em PRODUTO com recomendação |
-| | **Scripts** doctor, cleanup, show-report; **config para Windows** (EPERM/OneDrive) |
-| | **Guias extras** (execução rápida, orientações para a empresa) |
+# Teste 2 — build, unit e E2E
+cd "..\Teste 2\app"
+npm install
+npx playwright install chromium
+npm run build
+npx ng test --watch=false --browsers=ChromeHeadless
+npm run test:e2e
+```
 
-O Teste 1 já entrega mais do que o mínimo: pipeline de qualidade, cuidado com ambiente e documentação que facilita quem for dar continuidade.
+Os dois workflows acima validam essas rotinas automaticamente a cada push.
 
-### Teste 1 — O que ainda daria um “UAU” extra
-
-- **`.nvmrc`** com `20` — fixa a versão do Node e evita “funcionou na minha máquina” (o README já recomenda Node 20).
-- **Badge no README** (ex.: status do CI) — sinal visual de que a suíte está verde e o projeto é levado a sério.
-
-### Teste 2 — O que já é destaque
-
-| Solicitado | Entregue além |
-|------------|----------------|
-| Angular, Signals, Z.AI, PrimeNG, 1 rota, 1 componente | **Responsividade** conforme spec (900px/600px, KPIs 5→3→2, listas em coluna) |
-| Upload .txt, dashboard, filtro, erros | **Acessibilidade**: labels, `aria-label`, `role="alert"`, `role="region"`, `aria-live` |
-| ≥5 scripts Playwright, ≥1 com CSV | **6 cenários E2E** + **testes unitários** (normalizer, error-mapper, file-reader, service, interceptor) |
-| Timeout, rate limit, JSON inválido | **Normalização defensiva** (payload parcial da IA) + **limite 5 MB** + erro sem expor corpo da API |
-| Layout 2 colunas, identidade WhatsApp | **webServer** no Playwright (E2E sobe a aplicação sozinha) + código documentado |
-
-O Teste 2 atende todos os requisitos da especificação e ainda agrega: acessibilidade, responsividade explícita, camada de testes unitários, segurança e documentação no código.
-
-### Teste 2 — O que ainda daria um “UAU” extra
-
-- **CI para o Teste 2** — workflow que rode `npm run build`, testes unitários e E2E no push/PR (hoje só o Teste 1 tem CI). Quem abre o repositório vê os dois projetos com pipeline.
-- **Aviso de privacidade** na tela (ex.: “O conteúdo da conversa é enviado à Z.AI para análise”) — o DOCUMENTO_ENTREGA já citou como melhoria; implementado, vira diferencial de transparência.
-
-Resumo: os dois projetos já têm fatores UAU (CI e cuidado com ambiente no 1; acessibilidade, responsividade, testes unitários e segurança no 2). Os “extras” acima são incrementos de baixo esforço que reforçam a impressão de profissionalismo.
-
-## Leitura recomendada
+## Caminho recomendado de leitura
 
 ### Avaliar o Teste 1
 
 1. [Teste 1/README.md](./Teste%201/README.md)
 2. [Teste 1/Artefatos/CENARIOS.md](./Teste%201/Artefatos/CENARIOS.md)
 3. [Teste 1/Artefatos/PRODUTO.md](./Teste%201/Artefatos/PRODUTO.md)
-4. [Teste 1/Artefatos/EXECUCAO.md](./Teste%201/Artefatos/EXECUCAO.md)
+4. [Teste 1/Artefatos/MATRIZ_RISCO_PRODUTO.md](./Teste%201/Artefatos/MATRIZ_RISCO_PRODUTO.md)
+5. [Teste 1/Artefatos/EXECUCAO.md](./Teste%201/Artefatos/EXECUCAO.md)
 
 ### Avaliar o Teste 2
 
@@ -137,14 +140,14 @@ Resumo: os dois projetos já têm fatores UAU (CI e cuidado com ambiente no 1; a
 
 ## Segurança (Teste 2)
 
-O token da API Z.AI **não deve ser commitado**. Uso seguro neste repositório:
+O token da API Z.AI **nao deve ser commitado**. Uso seguro neste repositorio:
 
-- Informar o token **manualmente no campo da interface**.
-- Manter qualquer fallback local fora do versionamento.
-- Não colocar segredo em `.env`, `environment.ts`, README, logs ou evidências.
+- informar o token manualmente no campo da interface;
+- manter qualquer fallback local fora do versionamento;
+- nao colocar segredo em `.env`, `environment.ts`, README, logs ou evidencias.
 
 ## Observações
 
 - Cada teste pode ser avaliado de forma independente.
 - Build, `node_modules` e relatórios de execução não são versionados.
-- O repositório está organizado para avaliação técnica e reprodução local, pronto para subir ao GitHub.
+- O repositorio esta organizado para avaliacao tecnica, reproducao local e continuidade.

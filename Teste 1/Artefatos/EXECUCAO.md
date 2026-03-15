@@ -1,4 +1,4 @@
-# EXECUCAO
+﻿# EXECUCAO
 
 ## Objetivo
 
@@ -36,6 +36,7 @@ Teste 1/
   Artefatos/
     CENARIOS.md
     EXECUCAO.md
+    MATRIZ_RISCO_PRODUTO.md
     PERFORMANCE.md
     PRODUTO.md
     RETROSPECTIVA.md
@@ -65,8 +66,9 @@ Teste 1/
 |---------|-----|
 | `npm run test:doctor` | valida Node e ambiente local |
 | `npm run test:clean` | limpa artefatos antigos |
-| `npm run test:verify` | doctor + clean + smoke |
-| `npm run test:smoke:local` | roda 5 testes criticos |
+| `npm run test:verify` | doctor + clean + smoke + resumo executivo |
+| `npm run test:smoke:local` | roda 6 testes criticos |
+| `npm run test:brief` | imprime fechamento executivo da rodada |
 | `npm run test:e2e:local` | roda a suite completa |
 | `npm run test:e2e:report` | abre o relatorio HTML local |
 | `npm run lint` | valida o codigo |
@@ -84,7 +86,8 @@ Esse fluxo:
 
 - valida o ambiente;
 - limpa artefatos antigos;
-- roda os 5 testes principais.
+- roda os 6 testes principais;
+- imprime um resumo executivo da cobertura e do risco de produto monitorado.
 
 ### Suite completa
 
@@ -102,7 +105,7 @@ npm run test:e2e:report
 
 | Metrica | Valor esperado |
 |---|---|
-| Smoke | 5 testes |
+| Smoke executivo | 6 testes |
 | Suite completa | 16 testes |
 | CI | Node 20 + `npm run test:e2e` |
 
@@ -148,6 +151,7 @@ Quando o site abre `alert()`, o teste aceita automaticamente antes do clique fin
 
 - Em ambiente local, screenshots, traces e relatorio ficam em `%TEMP%/imts-teste1-playwright/`.
 - No CI, o relatorio HTML fica como artifact.
+- O resumo executivo do `test:verify` aponta para `Artefatos/MATRIZ_RISCO_PRODUTO.md`, conectando a execucao tecnica com impacto de negocio.
 
 ## Problemas comuns
 
@@ -162,6 +166,7 @@ Quando o site abre `alert()`, o teste aceita automaticamente antes do clique fin
 - `README_EXECUCAO_RAPIDA.md`
 - `ORIENTACOES_EMPRESA.md`
 - `Artefatos/CENARIOS.md`
+- `Artefatos/MATRIZ_RISCO_PRODUTO.md`
 - `Artefatos/PERFORMANCE.md`
 - `Artefatos/PRODUTO.md`
 - `Artefatos/RETROSPECTIVA.md`

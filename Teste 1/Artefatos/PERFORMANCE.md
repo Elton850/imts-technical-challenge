@@ -1,4 +1,4 @@
-# PERFORMANCE
+﻿# PERFORMANCE
 
 ## Objetivo
 

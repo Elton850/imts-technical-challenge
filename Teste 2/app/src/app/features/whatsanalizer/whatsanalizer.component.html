@@ -144,11 +144,46 @@
       </div>
     }
 
+    @if (showProcessingNotice()) {
+      <div
+        class="processing-notice"
+        role="note"
+        data-testid="processing-notice"
+        aria-label="Orientações sobre tempo de processamento e retentativa"
+      >
+        <div class="processing-notice-header">
+          <i
+            class="pi"
+            [class.pi-clock]="!isLoading()"
+            [class.pi-spin]="isLoading()"
+            [class.pi-spinner]="isLoading()"
+            aria-hidden="true"
+          ></i>
+          <div class="processing-notice-copy">
+            <strong>{{ processingNoticeTitle() }}</strong>
+            <p>{{ processingNoticeMessage() }}</p>
+          </div>
+        </div>
+
+        <ul class="processing-notice-tips">
+          <li>Oscilações temporárias podem acontecer mesmo com o aplicativo funcionando corretamente.</li>
+          <li>Se houver falha, aguarde cerca de 3 segundos antes de tentar novamente.</li>
+          <li>Não é necessário reenviar o arquivo: ele permanece carregado após uma instabilidade.</li>
+          <li>Para melhor chance de sucesso, use exportação sem mídia e mantenha a conexão estável.</li>
+        </ul>
+      </div>
+    }
+
     <!-- Erro de arquivo ou token -->
     @if (requestError()) {
       <div class="error-banner" role="alert" data-testid="error-banner">
         <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
-        <span>{{ requestError()!.message }}</span>
+        <div class="error-content">
+          <span class="error-message">{{ requestError()!.message }}</span>
+          @if (requestErrorHint()) {
+            <small class="error-retry-hint" data-testid="error-retry-hint">{{ requestErrorHint() }}</small>
+          }
+        </div>
       </div>
     }
 
@@ -164,8 +199,16 @@
       data-testid="analyze-btn"
     ></p-button>
 
+    @if (retryCountdown() > 0) {
+      <div class="retry-cooldown-note" role="status" aria-live="polite" data-testid="retry-cooldown-note">
+        <i class="pi pi-clock" aria-hidden="true"></i>
+        <span>{{ retryGuidanceMessage() }}</span>
+      </div>
+    }
+
     @if (isLoading()) {
       <div class="loading-hint" data-testid="loading-hint">
+        <span class="loading-retry-text">Instabilidades temporárias podem acontecer. Se houver falha ao final do processamento, aguarde cerca de 3 segundos e tente novamente.</span>
         <i class="pi pi-spin pi-spinner"></i>
         A análise pode levar até 2,5 minutos...
       </div>
@@ -200,6 +243,7 @@
       <div class="loading-state" data-testid="loading-state" role="status" aria-live="polite" aria-busy="true">
         <i class="pi pi-spin pi-spinner loading-spinner" aria-hidden="true"></i>
         <p class="loading-title">Analisando conversa com IA...</p>
+        <p class="loading-hint-dash">Se houver oscilação temporária, aguarde cerca de 3 segundos antes de tentar novamente.</p>
         <p class="loading-hint-dash">Isso pode levar até 2,5 min. Aguarde.</p>
       </div>
     }
@@ -208,97 +252,112 @@
     @if (hasAnalysis() && !isLoading()) {
       <div class="dashboard-content" data-testid="dashboard-content">
 
-        <!-- KPIs -->
-        <div class="kpi-grid" data-testid="kpi-grid">
-          <div class="kpi-card" data-testid="kpi-envolvidos">
-            <span class="kpi-number">{{ analysis()!.indicadores.envolvidos }}</span>
-            <span class="kpi-label">Envolvidos</span>
+        <section class="dashboard-section" data-testid="overview-section">
+          <div class="dashboard-section-header" data-testid="overview-section-header">
+            <span class="dashboard-section-eyebrow">Resultado da análise</span>
+            <h2 class="dashboard-section-title">Panorama da conversa</h2>
+            <p class="dashboard-section-description">
+              Visão rápida dos indicadores principais, do resumo executivo, do clima da conversa e dos participantes identificados.
+            </p>
           </div>
-          <div class="kpi-card" data-testid="kpi-tarefas">
-            <span class="kpi-number">{{ analysis()!.indicadores.tarefas }}</span>
-            <span class="kpi-label">Tarefas</span>
-          </div>
-          <div class="kpi-card" data-testid="kpi-prazos">
-            <span class="kpi-number">{{ analysis()!.indicadores.prazos }}</span>
-            <span class="kpi-label">Prazos</span>
-          </div>
-          <div class="kpi-card" data-testid="kpi-riscos">
-            <span class="kpi-number">{{ analysis()!.indicadores.riscos }}</span>
-            <span class="kpi-label">Riscos</span>
-          </div>
-          <div class="kpi-card" data-testid="kpi-conflitos">
-            <span class="kpi-number">{{ analysis()!.indicadores.conflitos }}</span>
-            <span class="kpi-label">Conflitos</span>
-          </div>
-        </div>
 
-        <!-- Resumo Executivo + Exportar -->
-        <p-card styleClass="dashboard-card" data-testid="resumo-card">
-          <ng-template pTemplate="header">
-            <div class="card-header">
-              <h3>📋 Resumo Executivo</h3>
+          <div class="kpi-grid" data-testid="kpi-grid">
+            <div class="kpi-card" data-testid="kpi-envolvidos">
+              <span class="kpi-number">{{ analysis()!.indicadores.envolvidos }}</span>
+              <span class="kpi-label">Envolvidos</span>
             </div>
-          </ng-template>
-          <div class="resumo-block">
-            <button
-              type="button"
-              class="export-summary-btn"
-              (click)="exportSummary()"
-              aria-label="Exportar resumo em arquivo .txt"
-              data-testid="export-summary-btn"
-            >
-              <i class="pi pi-download"></i>
-              <span>Exportar resumo (.txt)</span>
-            </button>
-            <p class="resumo-text" data-testid="resumo-text">{{ analysis()!.resumo }}</p>
-          </div>
-        </p-card>
-
-        <!-- Análise de Sentimento -->
-        <p-card styleClass="dashboard-card" data-testid="sentimento-card">
-          <ng-template pTemplate="header">
-            <div class="card-header">
-              <h3 data-testid="sentimento-title">{{ sentimentTitle() }}</h3>
+            <div class="kpi-card" data-testid="kpi-tarefas">
+              <span class="kpi-number">{{ analysis()!.indicadores.tarefas }}</span>
+              <span class="kpi-label">Tarefas</span>
             </div>
-          </ng-template>
-          <p data-testid="sentimento-desc">{{ analysis()!.sentimentoDescricao }}</p>
-        </p-card>
-
-        <!-- Envolvidos -->
-        <p-card styleClass="dashboard-card" data-testid="participantes-card">
-          <ng-template pTemplate="header">
-            <div class="card-header">
-              <h3>👥 Envolvidos</h3>
+            <div class="kpi-card" data-testid="kpi-prazos">
+              <span class="kpi-number">{{ analysis()!.indicadores.prazos }}</span>
+              <span class="kpi-label">Prazos</span>
             </div>
-          </ng-template>
-          <div class="chips-container" data-testid="participantes-chips">
-            @for (p of analysis()!.participantes; track p) {
-              <p-chip [label]="p" styleClass="participant-chip"></p-chip>
-            } @empty {
-              <span class="empty-chips">Nenhum participante identificado.</span>
-            }
+            <div class="kpi-card" data-testid="kpi-riscos">
+              <span class="kpi-number">{{ analysis()!.indicadores.riscos }}</span>
+              <span class="kpi-label">Riscos</span>
+            </div>
+            <div class="kpi-card" data-testid="kpi-conflitos">
+              <span class="kpi-number">{{ analysis()!.indicadores.conflitos }}</span>
+              <span class="kpi-label">Conflitos</span>
+            </div>
           </div>
-        </p-card>
 
-        <!-- Filtro por Participante -->
-        <div class="filter-row" data-testid="filter-row">
-          <label for="participantFilter" class="filter-label">Filtrar por participante:</label>
-          <p-select
-            inputId="participantFilter"
-            [options]="participantOptions()"
-            [ngModel]="selectedParticipant()"
-            (ngModelChange)="selectedParticipant.set($event)"
-            [ngModelOptions]="{standalone: true}"
-            optionLabel="label"
-            optionValue="value"
-            styleClass="filter-select"
-            aria-label="Filtrar listas por participante"
-            data-testid="participant-filter"
-          ></p-select>
-        </div>
+          <div class="insights-grid" data-testid="insights-grid">
+            <p-card styleClass="dashboard-card dashboard-card-summary" data-testid="resumo-card">
+              <ng-template pTemplate="header">
+                <div class="card-header">
+                  <h3>📋 Resumo Executivo</h3>
+                </div>
+              </ng-template>
+              <div class="resumo-block">
+                <button
+                  type="button"
+                  class="export-summary-btn"
+                  (click)="exportSummary()"
+                  aria-label="Exportar resumo em arquivo .txt"
+                  data-testid="export-summary-btn"
+                >
+                  <i class="pi pi-download"></i>
+                  <span>Exportar resumo (.txt)</span>
+                </button>
+                <p class="resumo-text" data-testid="resumo-text">{{ analysis()!.resumo }}</p>
+              </div>
+            </p-card>
 
-        <!-- Listas: Tarefas e Prazos -->
-        <div class="lists-grid" data-testid="lists-grid">
+            <p-card styleClass="dashboard-card" data-testid="sentimento-card">
+              <ng-template pTemplate="header">
+                <div class="card-header">
+                  <h3 data-testid="sentimento-title">{{ sentimentTitle() }}</h3>
+                </div>
+              </ng-template>
+              <p data-testid="sentimento-desc">{{ analysis()!.sentimentoDescricao }}</p>
+            </p-card>
+
+            <p-card styleClass="dashboard-card" data-testid="participantes-card">
+              <ng-template pTemplate="header">
+                <div class="card-header">
+                  <h3>👥 Envolvidos</h3>
+                </div>
+              </ng-template>
+              <div class="chips-container" data-testid="participantes-chips">
+                @for (p of analysis()!.participantes; track p) {
+                  <p-chip [label]="p" styleClass="participant-chip"></p-chip>
+                } @empty {
+                  <span class="empty-chips">Nenhum participante identificado.</span>
+                }
+              </div>
+            </p-card>
+          </div>
+        </section>
+
+        <section class="dashboard-section" data-testid="action-section">
+          <div class="dashboard-section-header" data-testid="action-section-header">
+            <span class="dashboard-section-eyebrow">Execução e acompanhamento</span>
+            <h2 class="dashboard-section-title">Itens acionáveis por participante</h2>
+            <p class="dashboard-section-description">
+              Filtre a visão para acompanhar tarefas, prazos, riscos e conflitos por pessoa sem perder o contexto geral.
+            </p>
+          </div>
+
+          <div class="filter-row" data-testid="filter-row">
+            <label for="participantFilter" class="filter-label">Filtrar por participante:</label>
+            <p-select
+              inputId="participantFilter"
+              [options]="participantOptions()"
+              [ngModel]="selectedParticipant()"
+              (ngModelChange)="selectedParticipant.set($event)"
+              [ngModelOptions]="{standalone: true}"
+              optionLabel="label"
+              optionValue="value"
+              styleClass="filter-select"
+              aria-label="Filtrar listas por participante"
+              data-testid="participant-filter"
+            ></p-select>
+          </div>
+
+          <div class="lists-grid" data-testid="lists-grid">
 
           <!-- Tarefas -->
           <p-card styleClass="dashboard-card list-card" data-testid="tarefas-card">
@@ -399,7 +458,8 @@
             }
           </p-card>
 
-        </div><!-- /lists-grid -->
+          </div><!-- /lists-grid -->
+        </section>
 
       </div><!-- /dashboard-content -->
     }

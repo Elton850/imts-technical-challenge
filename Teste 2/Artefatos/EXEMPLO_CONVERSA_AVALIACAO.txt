@@ -1,0 +1,57 @@
+11/03/2026, 08:42 - Ana: Bom dia, pessoal. Precisamos fechar o plano da entrega do dashboard Atlas hoje.
+11/03/2026, 08:43 - Bruno: Bom dia. Do lado do frontend, consigo entregar a base do painel com KPIs e cards ate amanha 18h.
+11/03/2026, 08:44 - Carla: Consigo revisar hierarquia visual e acessibilidade depois do primeiro layout. Preciso desse prototipo ate hoje 16h.
+11/03/2026, 08:46 - Diego: Backend aqui. A integracao com a API externa esta oscilando e isso pode impactar a demo.
+11/03/2026, 08:47 - Elisa: Do lado de QA, eu preciso de um fluxo minimamente estavel ate sexta 10h para fechar regressao.
+11/03/2026, 08:49 - Ana: Entao vamos organizar. Bruno entrega a primeira versao do painel amanha 18h. Carla revisa UX ainda hoje quando tiver o prototipo. Diego estabiliza a integracao. Elisa prepara os cenarios criticos.
+11/03/2026, 08:52 - Bruno: Ok. Minhas tarefas principais: KPI grid, cards de resumo, filtro por participante e responsividade mobile.
+11/03/2026, 08:54 - Carla: Alem da revisao visual, quero validar contraste, foco de teclado e clareza dos estados de erro.
+11/03/2026, 08:56 - Diego: Vou precisar decidir com voces se mantemos retry automatico ou se so orientamos retentativa manual. Retry automatico pode consumir mais token.
+11/03/2026, 08:57 - Ana: Minha preferencia e nao fazer retry automatico agora. Melhor orientar o usuario e manter o comportamento previsivel.
+11/03/2026, 08:59 - Elisa: Concordo. Para QA fica melhor testar. Mas precisamos explicar bem para o usuario quando o provedor falhar.
+11/03/2026, 09:03 - Bruno: Hoje de manha eu termino o layout base e subo o primeiro fluxo com upload, token e loading.
+11/03/2026, 09:04 - Carla: Quando voce subir, me marca. Quero revisar se a tela de resultado nao fica com muita informacao solta.
+11/03/2026, 09:06 - Bruno: Justo. Alias, eu acho que precisamos colocar titulos mais claros nas secoes do dashboard.
+11/03/2026, 09:08 - Ana: Boa. Vamos separar em panorama da conversa e itens acionaveis.
+11/03/2026, 09:10 - Diego: Atualizacao tecnica: o endpoint da IA respondeu com timeout em 2 chamadas seguidas agora cedo.
+11/03/2026, 09:11 - Elisa: Isso e risco alto para a apresentacao. Precisamos mostrar alguma orientacao de tempo esperado e tentativa segura.
+11/03/2026, 09:13 - Carla: UXmente faz sentido recomendar uma espera curta antes de tentar de novo. Nao deixa o usuario desesperado e nem parece bug.
+11/03/2026, 09:15 - Bruno: Testei aqui. Depois de umas oscilacoes, com 3 segundos a nova tentativa costuma funcionar.
+11/03/2026, 09:16 - Ana: Entao fechamos assim: sem retry automatico, mas com orientacao clara para aguardar cerca de 3 segundos.
+11/03/2026, 09:19 - Diego: Perfeito. Tambem vou preservar o arquivo carregado apos falha para evitar friccao.
+11/03/2026, 09:21 - Elisa: Isso ajuda bastante. Se o arquivo continuar carregado, a retentativa fica muito mais fluida.
+11/03/2026, 09:26 - Bruno: Acabei de subir a primeira tela. Tem resumo, sentimento, participantes e listas. Ainda quero polir o bloco de filtro.
+11/03/2026, 09:29 - Carla: Estou vendo agora. O dashboard esta bom, mas falta contexto visual entre os blocos. Parece um conjunto de quadros sem narrativa.
+11/03/2026, 09:31 - Bruno: Faz sentido. Vou colocar cabecalhos de secao e melhorar o agrupamento.
+11/03/2026, 09:33 - Ana: Excelente. Isso deixa a leitura muito melhor para quem usar pela primeira vez.
+11/03/2026, 09:40 - Diego: Atualizacao do backend: consegui reduzir erro de parse com normalizacao mais defensiva, mas o rate limit ainda acontece de vez em quando.
+11/03/2026, 09:42 - Elisa: Entao precisamos cobrir pelo menos timeout, rate limit, JSON invalido e payload parcial nos testes.
+11/03/2026, 09:45 - Bruno: Vou deixar os estados de erro mais conversacionais e menos secos.
+11/03/2026, 09:47 - Carla: Bom. So cuidado para nao exagerar no texto e cansar o usuario.
+11/03/2026, 09:49 - Ana: Lembrem que a entrega precisa continuar objetiva. Profissional, direta e segura.
+11/03/2026, 10:05 - Elisa: Montei a lista de cenarios criticos. Preciso do ambiente estavel ate quinta 14h para concluir tudo.
+11/03/2026, 10:08 - Diego: Consigo te entregar mocks mais completos ate hoje 17h.
+11/03/2026, 10:12 - Bruno: Tambem vou adicionar exportacao do resumo em txt. E simples, seguro e gera valor imediato.
+11/03/2026, 10:14 - Ana: Aprovado. Isso vira um diferencial bom para a avaliacao.
+11/03/2026, 10:18 - Carla: Outra sugestao: incluir aviso de privacidade antes do envio da conversa para a IA.
+11/03/2026, 10:19 - Bruno: Ja vou colocar isso no painel esquerdo, perto do botao.
+11/03/2026, 10:23 - Diego: Tenho uma preocupacao: se o token vazar em log ou persistencia, temos problema serio.
+11/03/2026, 10:24 - Bruno: Nao vou persistir token nem expor em log.
+11/03/2026, 10:25 - Elisa: Vou adicionar esse ponto na validacao.
+11/03/2026, 10:31 - Ana: Prazos consolidados:
+11/03/2026, 10:31 - Ana: 1) prototipo com layout e fluxo principal hoje 16h
+11/03/2026, 10:32 - Ana: 2) integracao mais estavel e mocks completos hoje 17h
+11/03/2026, 10:32 - Ana: 3) versao pronta para QA ate quinta 14h
+11/03/2026, 10:33 - Ana: 4) regressao final concluida ate sexta 10h
+11/03/2026, 10:36 - Carla: Se o contraste do filtro continuar baixo, eu vou pedir ajuste. Isso esta me incomodando.
+11/03/2026, 10:38 - Bruno: Tudo bem, eu ajusto. Mas precisamos parar de adicionar escopo em cima da hora.
+11/03/2026, 10:39 - Ana: Concordo com o ponto do escopo. A partir de agora, nenhuma feature nova sem validar impacto.
+11/03/2026, 10:41 - Diego: Isso evita risco de quebrar a entrega.
+11/03/2026, 10:44 - Elisa: E evita regressao desnecessaria perto da data final.
+11/03/2026, 10:50 - Bruno: Acabei de corrigir os titulos das secoes. Agora ficou bem mais facil entender o que e panorama e o que e acompanhamento.
+11/03/2026, 10:54 - Carla: Ficou melhor mesmo. Agora a experiencia esta mais guiada e menos fragmentada.
+11/03/2026, 11:02 - Ana: Otimo. Se mantivermos esse nivel de clareza e estabilidade, a apresentacao vai ser forte.
+11/03/2026, 11:05 - Diego: Vou seguir monitorando a instabilidade da API. Se piorar, aviso ate 13h.
+11/03/2026, 11:06 - Elisa: Perfeito. Para mim, os maiores riscos agora sao timeout do provedor, aumento de escopo e regressao no filtro.
+11/03/2026, 11:08 - Bruno: Do meu lado, tarefas finais: refinar filtro, revisar mensagens de erro, testar exportacao e ajustar responsividade.
+11/03/2026, 11:09 - Ana: Fechado. Obrigada, pessoal. Vamos tocar com foco na entrega e sem perder qualidade.

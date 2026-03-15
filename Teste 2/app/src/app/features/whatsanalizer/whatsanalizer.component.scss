@@ -204,6 +204,73 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   p { margin: 0; }
 }
 
+.processing-notice {
+  background: #fff8e8;
+  border: 1px solid #e0b94f;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: $wa-text;
+
+  .processing-notice-header {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  i {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #9a6700;
+  }
+
+  .processing-notice-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  strong {
+    font-size: 0.875rem;
+    color: #7a5200;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+}
+
+.processing-notice-tips {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.775rem;
+  color: $wa-muted;
+  line-height: 1.45;
+}
+
+.retry-cooldown-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba($wa-dark-green, 0.08);
+  color: $wa-dark-green;
+  font-size: 0.8rem;
+  line-height: 1.45;
+
+  i {
+    flex-shrink: 0;
+  }
+}
+
 // ─── Erro ──────────────────────────────────────────────────────────────────
 .error-banner {
   background: #fff3f3;
@@ -217,6 +284,21 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   color: #c0392b;
 
   i { flex-shrink: 0; margin-top: 2px; }
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.error-message {
+  line-height: 1.4;
+}
+
+.error-retry-hint {
+  color: #8e3b2e;
+  line-height: 1.5;
 }
 
 // ─── Botão ─────────────────────────────────────────────────────────────────
@@ -243,6 +325,13 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   font-size: 0.8rem;
   color: $wa-muted;
   justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.loading-retry-text {
+  font-size: 0.75rem;
+  line-height: 1.45;
 }
 
 // ─── Dashboard ────────────────────────────────────────────────────────────
@@ -303,7 +392,47 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 .dashboard-content {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+}
+
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dashboard-section-header {
+  background: rgba($wa-card-bg, 0.72);
+  border: 1px solid rgba($wa-dark-green, 0.08);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: $wa-shadow;
+  backdrop-filter: blur(6px);
+}
+
+.dashboard-section-eyebrow {
+  display: inline-flex;
+  margin-bottom: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: $wa-dark-green;
+}
+
+.dashboard-section-title {
+  margin: 0;
+  font-size: 1.28rem;
+  font-weight: 700;
+  color: $wa-text;
+}
+
+.dashboard-section-description {
+  margin: 8px 0 0;
+  max-width: 760px;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: $wa-muted;
 }
 
 // ─── KPI Grid ─────────────────────────────────────────────────────────────
@@ -311,6 +440,17 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+  gap: 16px;
+  align-items: start;
+}
+
+:host ::ng-deep .dashboard-card-summary.p-card {
+  grid-column: 1 / -1;
 }
 
 .kpi-card {
@@ -360,6 +500,10 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .card-header {
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba($wa-border, 0.95);
+
   h3 {
     font-size: 1rem;
     font-weight: 600;
@@ -434,6 +578,11 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba($wa-card-bg, 0.72);
+  border: 1px solid rgba($wa-dark-green, 0.08);
+  box-shadow: $wa-shadow;
 }
 
 .filter-label {
@@ -527,6 +676,10 @@ $wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 
   .kpi-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr;
   }
 }
 

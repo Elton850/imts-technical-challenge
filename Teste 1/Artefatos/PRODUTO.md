@@ -1,10 +1,18 @@
-# PRODUTO
+﻿# PRODUTO
 
 ## Diagnostico de produto
 
 ## Contexto
 
 A Calculadora do Cidadao atende uma dor real de correcao de valores monetarios historicos. O foco da analise foi clareza de uso, resiliencia de validacao e qualidade da jornada — complementado por achados reais da automacao E2E executada em 14/03/2026.
+
+## Resumo executivo do principal risco
+
+| ID | Achado | Severidade | Probabilidade | Cobertura automatizada | Leitura recomendada |
+|---|---|---|---|---|---|
+| ACH-01 | Campo "valor" aceita envio vazio sem erro | Alta | Media | `CT-02` em `tests/calculadora-validacao-valor.spec.ts` | `MATRIZ_RISCO_PRODUTO.md` + secao 1 abaixo |
+
+Esse e o ponto mais relevante para produto nesta entrega: a automacao nao encontrou apenas defeitos tecnicos, mas um comportamento de negocio que pode gerar interpretacao errada do resultado pelo usuario.
 
 ---
 
@@ -37,6 +45,7 @@ Detalhes adicionais sobre cada item estão nas seções "Oportunidades de melhor
    - O campo "valor a ser corrigido" NAO valida obrigatoriedade no servidor.
    - O formulario aceita envio sem valor e processa sem erro.
    - **Risco:** Usuario pode receber resultado monetario sem contexto (valor vazio = 0), gerando confusao ou decisao errada.
+   - **Severidade:** Alta. **Probabilidade:** Media.
    - Recomendacao: tornar o campo obrigatorio com mensagem clara, ou indicar explicitamente que o campo e opcional (com valor default de 0).
 
 2. **UX de validacao**

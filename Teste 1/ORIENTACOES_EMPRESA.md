@@ -1,4 +1,4 @@
-# ORIENTACOES PARA A EMPRESA - TESTE 1
+﻿# ORIENTACOES PARA A EMPRESA - TESTE 1
 
 ## Resumo executivo
 
@@ -26,6 +26,7 @@ Objetivo da entrega:
 
 3. Documentacao adicional
 - `README_EXECUCAO_RAPIDA.md`
+- `Artefatos/MATRIZ_RISCO_PRODUTO.md`
 - `Artefatos/RESUMO_EXECUTIVO.md`
 - `Artefatos/RELATORIO_EXECUCAO_E2E.md`
 - `Artefatos/BASELINE_EXECUCAO.md`
@@ -36,39 +37,19 @@ Objetivo da entrega:
 
 ## Como validar rapidamente
 
-Na pasta `Teste 1`.
+Para uma validacao objetiva:
 
-Pre-requisito: **Node 18, 19 ou 20**. Recomendado: **Node 20**.
+1. abrir `README_EXECUCAO_RAPIDA.md`;
+2. rodar `npm run test:verify` na pasta `Teste 1`;
+3. consultar `Artefatos/MATRIZ_RISCO_PRODUTO.md`, `Artefatos/PRODUTO.md` e `Artefatos/EXECUCAO.md`.
 
-```bash
-npm install
-npx playwright install chromium
-npm run test:verify
-```
-
-Suite completa:
-
-```bash
-npm run test:e2e:local
-```
-
-Relatorio HTML:
-
-```bash
-npm run test:e2e:report
-```
-
-## Como interpretar o resultado
-
-- Sucesso: `5 passed` no smoke ou `16 passed` na suite completa.
-- Falha: nome do teste no terminal e relatorio HTML para detalhes.
-- Evidencias locais: `%TEMP%/imts-teste1-playwright/`.
-- Evidencias no CI: artifact `playwright-report`.
+Esse fluxo costuma ser suficiente para avaliar cobertura, estabilidade e qualidade da entrega sem percorrer todo o repositorio.
 
 ## Pontos de destaque
 
 - Cobertura orientada a risco.
 - Achado real documentado: campo valor opcional.
+- Matriz de risco ligando cobertura tecnica com impacto de negocio.
 - Validacao de CSV com mensagens claras.
 - Material facil de ler para publico tecnico e nao tecnico.
 

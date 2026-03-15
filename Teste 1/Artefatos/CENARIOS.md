@@ -1,4 +1,4 @@
-# CENARIOS
+﻿# CENARIOS
 
 ## Objetivo
 
@@ -38,6 +38,21 @@ Validar o formulario "Correcao de Valores" da Calculadora do Cidadao (BCB), cobr
 |---|---|---|---|---|---|
 | ACH-01 | valorCorrecao | Campo e opcional; sistema processa sem valor informado | Erro de obrigatoriedade esperado | Usuario pode receber resultado sem contexto (valor vazio = 0), gerando confusao ou decisao errada. | Adicionar validacao de obrigatoriedade ou tornar campo claramente opcional |
 
+## Rastreabilidade executiva (cenario x risco x automacao)
+
+| Cenario | Risco de negocio protegido | Criticidade | Arquivo de teste | Entra no smoke executivo |
+|---|---|---|---|---|
+| CT-01 | Fluxo principal indisponivel ou com falha de calculo | Alta | `tests/calculadora-fluxo-feliz.spec.ts` | Sim |
+| CT-02 | Usuario recebe resultado sem perceber que o valor estava vazio | Alta | `tests/calculadora-validacao-valor.spec.ts` | Sim |
+| CT-03 | Data invalida aceita pelo sistema | Alta | `tests/calculadora-regra-data.spec.ts` | Sim |
+| CT-04 | Periodo inconsistente ou regressao apos erro | Alta | `tests/calculadora-regra-data.spec.ts` | Sim |
+| CT-05 | Valor zero tratado de forma inconsistente | Media | `tests/calculadora-borda.spec.ts` | Nao |
+| CT-06 | Valor alto quebra o fluxo | Media | `tests/calculadora-borda.spec.ts` | Nao |
+| CT-07 | Datas limite quebram a jornada | Media | `tests/calculadora-borda.spec.ts` | Nao |
+| CT-08 | Calculo sem indice selecionado | Alta | `tests/calculadora-validacao-indice.spec.ts` | Sim |
+| CT-10 | Divergencia entre massa real e comportamento do sistema | Alta | `tests/calculadora-data-driven.spec.ts` | Nao |
+| CT-11 | Valor negativo nao tratado | Media | `tests/calculadora-borda.spec.ts` | Nao |
+
 ## Roteiro de automacao (5 obrigatorios + extras)
 
 1. `CT-01` fluxo feliz completo.
@@ -45,6 +60,17 @@ Validar o formulario "Correcao de Valores" da Calculadora do Cidadao (BCB), cobr
 3. `CT-04` regra de data final menor que inicial + regressao com datas validas.
 4. `CT-08` validacao de indice obrigatorio.
 5. `CT-10` teste com massa externa CSV (5 casos: 4 validos, 1 invalido).
+
+## Smoke executivo (`npm run test:verify`)
+
+O fluxo de verificacao rapida foi ajustado para proteger nao apenas a execucao tecnica, mas tambem o principal achado de produto.
+
+- `CT-01` - fluxo feliz
+- `CT-02` - valor vazio (achado real)
+- `CT-03` / `CT-04` - regras de data + regressao
+- `CT-08` - indice obrigatorio
+
+Resultado esperado: **6 testes criticos** cobrindo fluxo principal, validacoes de alta severidade e um risco real de negocio.
 
 ## Rastreabilidade (cenario x script)
 

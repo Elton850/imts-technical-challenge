@@ -1,30 +1,14 @@
-# Teste 1 - Automacao em Sistema Externo
+﻿# Teste 1 - Automacao em Sistema Externo
 
-## Sobre esta entrega
+Automacao E2E da **Calculadora do Cidadao - Correcao de Valores**, do Banco Central, com foco em cobertura funcional, leitura tecnica e execucao reproduzivel.
 
-Este projeto automatiza a **Calculadora do Cidadao - Correcao de Valores**, do Banco Central.
+## Escopo atendido
 
-A proposta aqui foi atender o que o teste pediu de forma objetiva:
-
-- mapear cenarios relevantes;
-- automatizar os fluxos principais com Playwright;
-- usar massa externa em CSV;
-- registrar analise de performance;
-- documentar achados de produto, execucao e retrospectiva.
-
-O foco foi entregar um projeto facil de avaliar, facil de rodar e com boa leitura tecnica.
-
-## O que foi feito
-
-Esta entrega inclui:
-
-- testes E2E com **Playwright + TypeScript**;
 - cenarios positivos, negativos e de borda;
-- teste data-driven com arquivo CSV;
-- organizacao com Page Object;
-- validacao da massa CSV antes da execucao;
-- documentacao obrigatoria em `Artefatos`;
-- pipeline CI com GitHub Actions.
+- massa externa em CSV;
+- artefatos obrigatorios de cenarios, execucao, performance, produto e retrospectiva;
+- automacao com Playwright + TypeScript;
+- pipeline CI para validacao continua.
 
 ## Tecnologias usadas
 
@@ -33,6 +17,16 @@ Esta entrega inclui:
 - **Node.js / npm**
 - **GitHub Actions**
 - **Markdown** para documentacao
+
+## Diferenciais tecnicos
+
+- validacao do CSV antes da execucao, com mensagens claras para dados invalidos;
+- seletores centralizados e Page Object para manutencao simples;
+- scripts de apoio para diagnostico de ambiente, limpeza e abertura do relatorio;
+- configuracao local ajustada para Windows, reduzindo falhas `EPERM` em diretorios sincronizados;
+- achado de produto documentado a partir de comportamento observado no sistema real;
+- matriz de risco de produto ligando cenarios, scripts, severidade e recomendacoes;
+- resumo executivo apos `npm run test:verify`, mostrando cobertura critica e impacto de negocio.
 
 ## Estrutura da pasta
 
@@ -65,32 +59,17 @@ Teste 1/
 `-- Artefatos/
 ```
 
-## O que esperar ao avaliar
+Artefato novo de leitura executiva:
 
-Ao analisar este teste, a ideia e encontrar:
+- `Artefatos/MATRIZ_RISCO_PRODUTO.md`
 
-- cobertura dos pontos mais importantes do formulario;
-- rastreabilidade entre cenarios e scripts;
-- execucao reproduzivel;
-- documentacao clara para publico tecnico e nao tecnico;
-- cuidado com problemas reais de ambiente local e estabilidade.
+## Organizacao da automacao
 
-Pontos de destaque desta entrega:
-
-- existe um achado real documentado: o campo de valor pode ser processado vazio;
-- o CSV e validado antes do teste rodar;
-- a execucao local recebeu ajustes para contornar `EPERM` em ambiente Windows/OneDrive;
-- a suite foi organizada para leitura rapida de quem esta avaliando muitos projetos.
-
-## Como a automacao foi feita
-
-A automacao foi montada com foco em simplicidade e manutencao.
-
-- Os seletores ficam centralizados.
-- As interacoes principais com a pagina ficam no Page Object `calculadora.page.ts`.
-- Os testes foram separados por comportamento para facilitar leitura.
-- O cenario com massa externa usa `data/massa-correcao.csv`.
-- A configuracao local foi adaptada para reduzir falhas de permissao e lock de arquivos no Windows, usando diretorio temporario do sistema para artefatos de execucao.
+- seletores centralizados em `tests/selectors.ts`;
+- interacoes principais encapsuladas em `tests/pages/calculadora.page.ts`;
+- specs separadas por comportamento para leitura e manutencao;
+- massa externa em `data/massa-correcao.csv`;
+- artefatos de execucao enviados para o diretorio temporario do sistema.
 
 ## Cenarios cobertos
 
@@ -109,14 +88,14 @@ O detalhamento completo esta em:
 
 ## Instalacao
 
-**Node 18, 19 ou 20** recomendado (igual ao CI). Node 24+ pode causar spawn EPERM no Windows — se ocorrer, use `nvm use` ou instale Node 20 LTS.
+**Node 18, 19 ou 20** recomendado (igual ao CI). Node 24+ pode causar `spawn EPERM` no Windows. Se ocorrer, use `nvm use` ou instale Node 20 LTS.
 
 ```bash
 npm install
 npx playwright install chromium
 ```
 
-`npm run test:doctor` emite avisos de ambiente (nao bloqueia).
+`npm run test:doctor` emite avisos de ambiente, mas nao bloqueia a execucao.
 
 ## Como executar
 
@@ -126,7 +105,7 @@ npx playwright install chromium
 npm run test:verify
 ```
 
-Esse comando limpa resultados anteriores e roda os testes principais.
+Esse fluxo roda `test:doctor`, limpa resultados antigos, executa o smoke principal e fecha com um resumo executivo da rodada.
 
 ### Suite completa
 
@@ -140,6 +119,9 @@ npm run test:e2e:local
 npm run test:e2e:report
 ```
 
+Se precisar abrir manualmente, o caminho local esperado e `%TEMP%/imts-teste1-playwright/report`.
+Importante: a pasta correta e `report`, nao `repo`.
+
 ### Rodar um teste especifico
 
 ```bash
@@ -152,37 +134,34 @@ npx playwright test tests/calculadora-fluxo-feliz.spec.ts
 |---|---|
 | `npm run test:doctor` | emite avisos de Node/ambiente (nao bloqueia) |
 | `npm run test:clean` | limpa diretorios de resultado |
-| `npm run test:verify` | doctor + clean + smoke |
-| `npm run test:smoke:local` | roda apenas testes criticos |
+| `npm run test:verify` | doctor + clean + smoke + brief |
+| `npm run test:smoke:local` | roda 6 testes criticos |
+| `npm run test:brief` | imprime o fechamento executivo da rodada |
 | `npm run test:e2e:local` | roda a suite completa |
 | `npm run test:e2e:report` | abre o relatorio HTML |
 | `npm run lint` | valida o codigo |
 | `npm run format:check` | valida formatacao |
 
-## Documentos importantes
+## Documentos principais
 
-Para quem estiver avaliando o projeto, estes sao os arquivos principais:
+Para avaliacao rapida, estes sao os arquivos mais importantes:
 
 - [`README_EXECUCAO_RAPIDA.md`](./README_EXECUCAO_RAPIDA.md)
 - [`ORIENTACOES_EMPRESA.md`](./ORIENTACOES_EMPRESA.md)
 - [`Artefatos/CENARIOS.md`](./Artefatos/CENARIOS.md)
 - [`Artefatos/EXECUCAO.md`](./Artefatos/EXECUCAO.md)
+- [`Artefatos/MATRIZ_RISCO_PRODUTO.md`](./Artefatos/MATRIZ_RISCO_PRODUTO.md)
 - [`Artefatos/PERFORMANCE.md`](./Artefatos/PERFORMANCE.md)
 - [`Artefatos/PRODUTO.md`](./Artefatos/PRODUTO.md)
 - [`Artefatos/RETROSPECTIVA.md`](./Artefatos/RETROSPECTIVA.md)
 
 ## Observacoes finais
 
-Este teste foi pensado para ser direto de avaliar:
-
-- o que foi pedido esta documentado;
-- a automacao esta organizada;
-- os guias de uso estao separados;
-- os achados e limitacoes ficaram registrados com clareza.
+Este teste depende de um sistema externo, portanto variacoes de lentidao do BCB podem influenciar o tempo de execucao.
 
 Se a avaliacao for curta, a melhor sequencia e:
 
 1. ler este arquivo;
 2. rodar `npm run test:verify`;
-3. consultar `Artefatos/CENARIOS.md` e `Artefatos/PRODUTO.md`.
+3. consultar `Artefatos/MATRIZ_RISCO_PRODUTO.md` e `Artefatos/PRODUTO.md`.
 

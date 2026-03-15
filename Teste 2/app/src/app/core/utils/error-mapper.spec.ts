@@ -14,7 +14,8 @@ describe('error-mapper', () => {
     const err = new HttpErrorResponse({ status: 429 });
     const result = mapHttpError(err);
     expect(result.type).toBe('rate_limit');
-    expect(result.message).toContain('Limite de requisições');
+    expect(result.message).toContain('Limite de requis');
+    expect(result.message).toContain('provedor externo');
   });
 
   it('deve mapear error.code 1302 para rate_limit', () => {

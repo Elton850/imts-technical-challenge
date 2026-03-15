@@ -1,4 +1,4 @@
-# Especificacoes Tecnicas - Teste 2 (AI Chat Insights / WhatsAnalizer)
+﻿# Especificacoes Tecnicas - Teste 2 (AI Chat Insights / WhatsAnalizer)
 
 ## 1) Objetivo e contexto
 

@@ -1,4 +1,4 @@
-# RESUMO EXECUTIVO — Teste 1
+﻿# RESUMO EXECUTIVO — Teste 1
 
 **Documento de 1 pagina para publico nao tecnico.**
 

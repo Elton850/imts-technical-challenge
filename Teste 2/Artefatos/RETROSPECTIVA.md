@@ -1,4 +1,4 @@
-# RETROSPECTIVA – AI Chat Insights (WhatsAnalizer)
+﻿# RETROSPECTIVA – AI Chat Insights (WhatsAnalizer)
 
 ## 1. O que funcionou bem
 

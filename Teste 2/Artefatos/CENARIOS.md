@@ -1,4 +1,4 @@
-# CENARIOS – AI Chat Insights (WhatsAnalizer)
+﻿# CENARIOS – AI Chat Insights (WhatsAnalizer)
 
 ## Metodologia de priorização
 
@@ -66,8 +66,8 @@ Cenários priorizados por risco e valor: fluxo principal (happy path), tratament
 
 | Sub | Entrada | Resultado esperado |
 |-----|---------|-------------------|
-| 03a | API retorna 429 | Banner de erro com "Limite de requisições"; botão reabilitado |
-| 03b | API retorna JSON inválido | Banner com "interpretar a resposta" |
+| 03a | API retorna 429 | Banner de erro com "Limite de requisições"; cooldown curto (~3s) e botão reabilitado ao fim da janela |
+| 03b | API retorna JSON inválido | Banner com "interpretar a resposta" + cooldown curto (~3s) |
 | 03c | Upload de arquivo `.json` (não .txt) | Banner de erro de tipo de arquivo |
 | 03d | Sem token com arquivo | Botão permanece desabilitado |
 | 03e | Durante loading | Botão desabilitado até resposta |

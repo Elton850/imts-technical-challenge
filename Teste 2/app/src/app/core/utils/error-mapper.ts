@@ -9,7 +9,7 @@ export function mapHttpError(error: unknown): AppError {
   if (error instanceof Error && error.name === 'TimeoutError') {
     return {
       type: 'timeout',
-      message: 'A análise demorou mais que o esperado (2,5 min). Tente novamente com um arquivo menor.',
+      message: 'A análise demorou mais que o esperado (2,5 min). Isso pode acontecer em momentos de lentidão do provedor.',
     };
   }
 
@@ -18,7 +18,7 @@ export function mapHttpError(error: unknown): AppError {
     if (error.status === 429 || error.error?.code === 1302 || error.error?.error?.code === 1302) {
       return {
         type: 'rate_limit',
-        message: 'Limite de requisições atingido. Aguarde alguns instantes e tente novamente.',
+        message: 'Limite de requisições atingido no provedor externo. Aguarde alguns instantes e tente novamente.',
       };
     }
     if (error.status === 401 || error.status === 403) {

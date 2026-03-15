@@ -1,4 +1,4 @@
-# PERFORMANCE – AI Chat Insights (WhatsAnalizer)
+﻿# PERFORMANCE – AI Chat Insights (WhatsAnalizer)
 
 ## 1. Visão geral
 

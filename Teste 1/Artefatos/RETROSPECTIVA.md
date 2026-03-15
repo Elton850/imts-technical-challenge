@@ -1,4 +1,4 @@
-# RETROSPECTIVA
+﻿# RETROSPECTIVA
 
 ## Resumo da execucao
 

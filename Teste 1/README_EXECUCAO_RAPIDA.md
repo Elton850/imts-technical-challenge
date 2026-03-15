@@ -1,6 +1,6 @@
-# Execucao Rapida - Teste 1
+﻿# Execucao Rapida - Teste 1
 
-Guia curto para validar a entrega rapidamente.
+Guia curto para validar a entrega sem percorrer toda a documentacao.
 
 ## Pre-requisitos
 
@@ -18,7 +18,7 @@ Importante:
 - A versao recomendada e **Node 20**, igual ao CI.
 - Se usar `nvm`, rode `nvm use` dentro da pasta `Teste 1`.
 
-## 3 comandos para rodar
+## Fluxo recomendado
 
 Na pasta `Teste 1`, execute:
 
@@ -35,11 +35,7 @@ npx playwright install chromium
 npm run test:verify
 ```
 
-Esse comando:
-
-- valida o ambiente com `test:doctor`;
-- limpa artefatos antigos;
-- roda os 5 testes criticos.
+Esse comando valida o ambiente, limpa artefatos antigos, roda os 6 testes criticos e imprime um resumo executivo no terminal.
 
 Para a suite completa:
 
@@ -53,30 +49,27 @@ npm run test:e2e:local
 npm run test:e2e:report
 ```
 
-## Como interpretar o resultado
+Se quiser abrir manualmente com Playwright, use a pasta:
+
+```text
+%TEMP%/imts-teste1-playwright/report
+```
+
+Importante: a pasta correta e `report`, nao `repo`.
+
+## Resultado esperado
 
 ### Passou
 
 Voce vera algo como:
 
 ```text
-5 passed (~18s)   # smoke
+6 passed (~20s)   # smoke executivo
 16 passed (~60s)  # suite completa
 ```
 
-### Falhou
-
-- O terminal mostra qual teste falhou.
-- Em ambiente local, os artefatos ficam em `%TEMP%/imts-teste1-playwright/`.
+- Em falha local, os artefatos ficam em `%TEMP%/imts-teste1-playwright/`.
 - No CI, o relatorio HTML fica como artifact.
-
-## Smoke
-
-Para rodar apenas o smoke sem limpeza:
-
-```bash
-npm run test:smoke:local
-```
 
 ## Erros comuns
 
@@ -100,4 +93,4 @@ O workflow em `.github/workflows/teste1-playwright.yml` usa:
 
 ## Mais detalhes
 
-Consulte `Artefatos/EXECUCAO.md`.
+Consulte `README.md` para visao geral, `Artefatos/EXECUCAO.md` para detalhes operacionais e `Artefatos/MATRIZ_RISCO_PRODUTO.md` para a leitura de negocio.

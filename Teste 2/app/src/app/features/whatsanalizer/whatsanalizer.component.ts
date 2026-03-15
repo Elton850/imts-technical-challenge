@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, computed, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, computed, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
@@ -11,8 +11,6 @@ import { Password } from 'primeng/password';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { Chip } from 'primeng/chip';
-import { SelectButton } from 'primeng/selectbutton';
-import { Badge } from 'primeng/badge';
 import { Toast } from 'primeng/toast';
 import { Tag } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
@@ -38,8 +36,6 @@ import { readTextFile } from '../../core/utils/file-reader.util';
     Button,
     Card,
     Chip,
-    SelectButton,
-    Badge,
     Toast,
     Tag,
   ],
@@ -51,9 +47,10 @@ import { readTextFile } from '../../core/utils/file-reader.util';
  * Componente principal do WhatsAnalizer: upload de .txt, calibração (modelo, temperature, token),
  * chamada à Z.AI e exibição do dashboard com KPIs, filtro por participante e listas.
  */
-export class WhatsAnalizerComponent implements OnInit {
+export class WhatsAnalizerComponent implements OnDestroy {
   private readonly analysisService = inject(ZaiAnalysisService);
   private readonly messageService = inject(MessageService);
+  private retryCountdownTimer: ReturnType<typeof setInterval> | null = null;
 
   // ─── Estado de entrada ─────────────────────────────────────────────────────
   readonly systemPrompt = signal<string>(DEFAULT_SYSTEM_PROMPT);
@@ -66,6 +63,7 @@ export class WhatsAnalizerComponent implements OnInit {
   // ─── Estado de request ────────────────────────────────────────────────────
   readonly isLoading = signal<boolean>(false);
   readonly requestError = signal<AppError | null>(null);
+  readonly retryCountdown = signal<number>(0);
 
   // ─── Estado de domínio ────────────────────────────────────────────────────
   readonly analysis = signal<AiAnalysisNormalized | null>(null);
@@ -75,13 +73,53 @@ export class WhatsAnalizerComponent implements OnInit {
 
   // ─── Constantes expostas ao template ──────────────────────────────────────
   readonly models = ZAI_MODELS;
+  readonly suggestedRetryDelaySeconds = 3;
 
   // ─── Computados ───────────────────────────────────────────────────────────
   readonly canAnalyze = computed(() =>
-    !!this.chatText() && !!this.token() && !this.isLoading()
+    !!this.chatText() && !!this.token() && !this.isLoading() && this.retryCountdown() === 0
   );
 
   readonly hasAnalysis = computed(() => this.analysis() !== null);
+
+  readonly showProcessingNotice = computed(() => !!this.uploadedFile());
+
+  readonly processingNoticeTitle = computed(() =>
+    this.isLoading() ? 'Processamento em andamento' : 'Sobre o processamento'
+  );
+
+  readonly processingNoticeMessage = computed(() =>
+    this.isLoading()
+      ? 'A análise depende do provedor externo Z.AI e pode levar até 2,5 minutos.'
+      : 'A análise depende do provedor externo Z.AI, pode levar até 2,5 minutos e pode oscilar por latência, timeout ou limite temporário de requisições.'
+  );
+
+  readonly retryGuidanceMessage = computed(() => {
+    const remaining = this.retryCountdown();
+    if (remaining > 0) {
+      return `Nova tentativa liberada em ${remaining}s. O arquivo continua carregado e não precisa ser enviado de novo.`;
+    }
+
+    return `Em falhas temporárias, aguarde cerca de ${this.suggestedRetryDelaySeconds} segundos antes de tentar novamente.`;
+  });
+
+  readonly requestErrorHint = computed(() => {
+    const error = this.requestError();
+    if (!error) return '';
+
+    switch (error.type) {
+      case 'timeout':
+        return `Isso pode acontecer com conversas longas ou em momentos de maior lentidão. Aguarde cerca de ${this.suggestedRetryDelaySeconds} segundos e tente novamente. Se quiser, tente um recorte menor da conversa.`;
+      case 'rate_limit':
+        return `O limite do provedor externo foi atingido temporariamente. Aguarde cerca de ${this.suggestedRetryDelaySeconds} segundos e tente novamente sem reenviar o arquivo.`;
+      case 'parse_error':
+        return `O provedor retornou uma resposta em formato inesperado. Isso pode ser temporário. Aguarde cerca de ${this.suggestedRetryDelaySeconds} segundos e tente novamente.`;
+      case 'network':
+        return `Falhas temporárias de rede ou disponibilidade podem acontecer. Confira sua conexão, aguarde cerca de ${this.suggestedRetryDelaySeconds} segundos e tente novamente.`;
+      default:
+        return '';
+    }
+  });
 
   readonly participantOptions = computed(() => {
     const result = this.analysis();
@@ -140,8 +178,8 @@ export class WhatsAnalizerComponent implements OnInit {
     return map[prioridade?.toLowerCase()] ?? 'info';
   };
 
-  ngOnInit(): void {
-    // Estado inicial gerenciado por signals
+  ngOnDestroy(): void {
+    this.clearRetryCooldown();
   }
 
   async onFileSelected(event: Event): Promise<void> {
@@ -154,11 +192,13 @@ export class WhatsAnalizerComponent implements OnInit {
       this.uploadedFile.set(file);
       this.chatText.set(text);
       this.requestError.set(null);
+      this.clearRetryCooldown();
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Erro ao ler o arquivo.';
       this.requestError.set({ type: 'invalid_file', message: msg });
       this.uploadedFile.set(null);
       this.chatText.set('');
+      this.clearRetryCooldown();
       input.value = '';
     }
   }
@@ -171,6 +211,7 @@ export class WhatsAnalizerComponent implements OnInit {
       return;
     }
 
+    this.clearRetryCooldown();
     this.isLoading.set(true);
     this.requestError.set(null);
     this.analysis.set(null);
@@ -193,6 +234,7 @@ export class WhatsAnalizerComponent implements OnInit {
       )
       .subscribe({
         next: (result) => {
+          this.clearRetryCooldown();
           this.analysis.set(result);
           const duration = ((Date.now() - startTime) / 1000).toFixed(1);
           this.messageService.add({
@@ -204,6 +246,11 @@ export class WhatsAnalizerComponent implements OnInit {
         },
         error: (err: AppError) => {
           this.requestError.set(err);
+          if (this.isTransientRetryableError(err)) {
+            this.startRetryCooldown();
+          } else {
+            this.clearRetryCooldown();
+          }
         },
       });
   }
@@ -214,6 +261,34 @@ export class WhatsAnalizerComponent implements OnInit {
     this.analysis.set(null);
     this.requestError.set(null);
     this.selectedParticipant.set('');
+    this.clearRetryCooldown();
+  }
+
+  private isTransientRetryableError(error: AppError): boolean {
+    return ['timeout', 'rate_limit', 'parse_error', 'network'].includes(error.type);
+  }
+
+  private startRetryCooldown(): void {
+    this.clearRetryCooldown();
+    this.retryCountdown.set(this.suggestedRetryDelaySeconds);
+    this.retryCountdownTimer = setInterval(() => {
+      const remaining = this.retryCountdown();
+      if (remaining <= 1) {
+        this.clearRetryCooldown();
+        return;
+      }
+
+      this.retryCountdown.set(remaining - 1);
+    }, 1000);
+  }
+
+  private clearRetryCooldown(): void {
+    if (this.retryCountdownTimer !== null) {
+      clearInterval(this.retryCountdownTimer);
+      this.retryCountdownTimer = null;
+    }
+
+    this.retryCountdown.set(0);
   }
 
   /**

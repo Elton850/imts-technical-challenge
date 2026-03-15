@@ -1,4 +1,4 @@
-# PRODUTO – AI Chat Insights (WhatsAnalizer)
+﻿# PRODUTO – AI Chat Insights (WhatsAnalizer)
 
 ## 1. Proposta de valor
 

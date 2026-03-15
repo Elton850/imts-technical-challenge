@@ -17,10 +17,13 @@ test.describe('Cenário 3 – Tratamento de erros', () => {
     await page.locator('[data-testid="analyze-btn"]').click();
 
     await expect(page.locator('[data-testid="error-banner"]')).toBeVisible({ timeout: 15000 });
-    await expect(page.locator('[data-testid="error-banner"]')).toContainText('Limite de requisições');
+    await expect(page.locator('[data-testid="error-banner"]')).toContainText('Limite de requis');
+    await expect(page.locator('[data-testid="error-retry-hint"]')).toContainText('3 segundos');
+    await expect(page.locator('[data-testid="retry-cooldown-note"]')).toContainText('3s');
 
-    // Botão deve ser reabilitado após erro
-    await expect(getAnalyzeButton(page)).not.toBeDisabled();
+    // Botão deve respeitar a janela curta de retentativa e reabilitar depois
+    await expect(getAnalyzeButton(page)).toBeDisabled();
+    await expect(getAnalyzeButton(page)).not.toBeDisabled({ timeout: 5000 });
   });
 
   test('deve exibir erro de parse para JSON inválido', async ({ page }) => {
@@ -31,6 +34,8 @@ test.describe('Cenário 3 – Tratamento de erros', () => {
 
     await expect(page.locator('[data-testid="error-banner"]')).toBeVisible({ timeout: 15000 });
     await expect(page.locator('[data-testid="error-banner"]')).toContainText('interpretar');
+    await expect(page.locator('[data-testid="error-retry-hint"]')).toContainText('3 segundos');
+    await expect(page.locator('[data-testid="retry-cooldown-note"]')).toContainText('3s');
   });
 
   test('deve exibir erro ao tentar enviar arquivo não .txt', async ({ page }) => {
@@ -79,5 +84,7 @@ test.describe('Cenário 3 – Tratamento de erros', () => {
 
     // Durante loading, botão deve estar desabilitado
     await expect(getAnalyzeButton(page)).toBeDisabled();
+    await expect(page.locator('[data-testid="processing-notice"]')).toContainText('2,5');
+    await expect(page.locator('[data-testid="loading-state"]')).toContainText('3 segundos');
   });
 });

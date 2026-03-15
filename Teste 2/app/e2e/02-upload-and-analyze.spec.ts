@@ -14,6 +14,14 @@ test.describe('Cenário 2 – Upload e análise com sucesso', () => {
     await expect(page.locator('[data-testid="privacy-notice"]')).toContainText('conteúdo da conversa');
   });
 
+  test('deve orientar sobre demora esperada e possibilidade de retentativa', async ({ page }) => {
+    await fillTokenAndUploadFile(page);
+    await expect(page.locator('[data-testid="processing-notice"]')).toBeVisible();
+    await expect(page.locator('[data-testid="processing-notice"]')).toContainText('2,5');
+    await expect(page.locator('[data-testid="processing-notice"]')).toContainText('3 segundos');
+    await expect(page.locator('[data-testid="processing-notice"]')).toContainText('sem m');
+  });
+
   test('deve aceitar arquivo .txt e habilitar botão de análise', async ({ page }) => {
     await fillTokenAndUploadFile(page);
 
@@ -33,6 +41,8 @@ test.describe('Cenário 2 – Upload e análise com sucesso', () => {
 
     // Aguarda dashboard aparecer
     await expect(page.locator('[data-testid="dashboard-content"]')).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('[data-testid="overview-section-header"]')).toContainText('Panorama da conversa');
+    await expect(page.locator('[data-testid="action-section-header"]')).toContainText('Itens acionáveis');
 
     // Verifica KPIs presentes
     await expect(page.locator('[data-testid="kpi-envolvidos"]')).toBeVisible();
@@ -74,6 +84,7 @@ test.describe('Cenário 2 – Upload e análise com sucesso', () => {
     await page.locator('[data-testid="analyze-btn"]').click();
     await expect(page.locator('[data-testid="dashboard-content"]')).toBeVisible({ timeout: 15000 });
 
+    await expect(page.locator('[data-testid="filter-row"]')).toContainText('Filtrar por participante');
     await expect(page.locator('[data-testid="tarefas-card"]')).toBeVisible();
     await expect(page.locator('[data-testid="prazos-card"]')).toBeVisible();
     await expect(page.locator('[data-testid="riscos-card"]')).toBeVisible();

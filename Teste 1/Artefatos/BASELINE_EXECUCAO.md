@@ -1,4 +1,4 @@
-# BASELINE DE EXECUCAO
+﻿# BASELINE DE EXECUCAO
 
 ## Objetivo
 
