@@ -10,11 +10,15 @@ export const ZAI_MODELS = [
 ];
 
 export const ZAI_TIMEOUT_MS = 150_000; // 2,5 minutos
+export const ZAI_DEFAULT_MODEL = 'glm-4.5-flash';
+export const ZAI_DEFAULT_TEMPERATURE = 0.3;
+export const ZAI_AUTO_RETRY_ATTEMPTS = 1;
+export const ZAI_AUTO_RETRY_DELAY_MS = 1_200;
 
 export const ZAI_HTTP_CONTEXT_KEY = 'ZAI_REQUEST';
 
-export const DEFAULT_SYSTEM_PROMPT = `Você é um especialista em análise de conversas corporativas.
-Analise o histórico de conversa do WhatsApp fornecido e retorne APENAS um JSON válido (sem markdown, sem texto adicional) com exatamente esta estrutura:
+export const DEFAULT_SYSTEM_PROMPT = `Você analisa conversas corporativas de WhatsApp.
+Retorne somente JSON válido, sem markdown ou texto extra, usando esta estrutura:
 
 {
   "resumo": "Resumo executivo da conversa em 2-4 frases",
@@ -42,4 +46,4 @@ Analise o histórico de conversa do WhatsApp fornecido e retorne APENAS um JSON 
   ]
 }
 
-Campos podem ser omitidos se não houver dados. Responda SOMENTE com o JSON.`;
+Se um campo não tiver dados, retorne array vazio ou omita o campo. Responda SOMENTE com o JSON.`;

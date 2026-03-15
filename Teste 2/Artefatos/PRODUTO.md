@@ -49,13 +49,14 @@ Explorar dashboard (KPIs, resumo, sentimento, filtros)
 **O que a aplicação comunica:**
 - Que o token não é armazenado (hint no campo)
 - Que a análise é gerada por IA (contexto do sistema)
+- Que o conteúdo da conversa é enviado a um provedor externo (aviso de privacidade)
+- Que pode haver oscilação de latência e necessidade de retentativa por dependência do provedor externo
 
 **O que poderia comunicar melhor:**
 - Que o resultado é probabilístico e pode conter imprecisões
-- Que o conteúdo da conversa é enviado a um provedor externo (Z.AI)
 - Que o modelo escolhido afeta a qualidade do resultado
 
-**Recomendação:** adicionar um aviso de privacidade antes do primeiro envio, informando que o conteúdo será processado pela API Z.AI.
+**Recomendação:** reforçar em documentação de avaliação que oscilações residuais de tempo de resposta dependem majoritariamente da API Z.AI, mesmo com mitigação no frontend.
 
 ---
 
@@ -79,6 +80,8 @@ Explorar dashboard (KPIs, resumo, sentimento, filtros)
 
 - **Qualidade depende do modelo:** modelos mais leves podem gerar resultados imprecisos
 - **Formato do export varia:** exportações antigas do WhatsApp têm formatos ligeiramente diferentes
+- **Latência real depende da Z.AI:** timeout, rate limit e variação de tempo podem acontecer mesmo com a aplicação funcionando corretamente
+- **Mitigação local é parcial:** limpeza de ruído, recorte de contexto e retry curto ajudam, mas não eliminam toda a instabilidade do provedor
 - **Sem histórico:** cada análise é independente; não há comparação entre conversas
 - **Sem exportação:** o dashboard não pode ser exportado como PDF ou planilha
 - **Sem edição:** o usuário não pode corrigir erros da IA diretamente no dashboard

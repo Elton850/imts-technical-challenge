@@ -98,6 +98,7 @@ O repositorio foi fechado para avaliacao rapida, reproducao local e continuidade
 - **Arquivo de conversa pronto para avaliacao manual** em `Teste 2/Artefatos/EXEMPLO_CONVERSA_AVALIACAO.txt`.
 - **Aviso de privacidade, exportacao de resumo e token fora de log ou persistencia.**
 - **Orientacao de processamento e retentativa** para explicar latencia esperada, falhas temporarias do provedor externo e janela segura de nova tentativa.
+- **Reducao de contexto + retry enxuto** para mitigar payload excessivo e falhas transitórias rapidas sem mascarar rate limit do provedor.
 - **Normalizacao defensiva** para payload parcial ou inesperado da IA, preservando a estabilidade da UI.
 
 ## Quick Evaluation Path

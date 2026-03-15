@@ -10,7 +10,8 @@ Este documento analisa o desempenho da aplicação em suas principais dimensões
 
 ### Mecanismo
 - FileReader (API nativa do browser), leitura assíncrona com `readAsText`
-- Sem processamento adicional: texto lido é enviado diretamente à API
+- Limpeza leve do texto para remover ruído de export do WhatsApp
+- Redução conservadora de contexto em conversas longas, priorizando trechos recentes e acionáveis
 
 ### Comportamento esperado por tamanho
 
@@ -22,11 +23,15 @@ Este documento analisa o desempenho da aplicação em suas principais dimensões
 
 ### Gargalo identificado
 - Arquivos de WhatsApp com imagens exportadas como texto podem ter payload extenso
-- Sem limite de tamanho imposto: arquivos muito grandes podem exceder limites da API Z.AI
+- Mesmo com pré-processamento, conversas muito extensas ainda podem pressionar limite de contexto e latência do provedor
+
+### Mitigação implementada
+- Remoção de placeholders e linhas sem valor analítico
+- Recorte inteligente com foco em recência e linhas potencialmente acionáveis
 
 ### Recomendação futura
-- Adicionar aviso para arquivos > 500 KB
-- Implementar truncamento inteligente preservando mensagens mais recentes
+- Adicionar aviso visual para arquivos > 500 KB
+- Evoluir de recorte heurístico para chunking/sumarização em múltiplas etapas
 
 ---
 
@@ -34,17 +39,19 @@ Este documento analisa o desempenho da aplicação em suas principais dimensões
 
 ### Configuração
 - Timeout: 150.000ms (2,5 minutos)
-- Sem retry automático (decisão intencional para não inflar uso do token)
+- Retry automático enxuto: 1 nova tentativa curta apenas para falhas rápidas e transitórias, sem repetir `429/rate limit`
 - Mock de rede nos testes E2E elimina dependência de latência real
 
 ### Observações
 - O tempo de resposta real depende do modelo e do tamanho do contexto
 - Modelos mais leves (glm-4.5-flash) tendem a ser mais rápidos
 - Rate limit pode causar frustração em sessões de uso intenso
+- A maior fonte de variabilidade percebida continua sendo o provedor externo Z.AI, não a renderização local do dashboard
 
 ### Janela observada (estimada com mock)
 - Tempo de roundtrip local (mock): < 100ms
 - Tempo de parseamento e normalização: < 5ms
+- Tempo de pré-processamento local: baixo, proporcional ao número de linhas; impacto desprezível frente à latência da API
 
 ---
 
@@ -86,7 +93,7 @@ Este documento analisa o desempenho da aplicação em suas principais dimensões
 
 | Prioridade | Melhoria | Motivo |
 |------------|----------|--------|
-| Alta | Aviso de arquivo grande (> 500 KB) | Prevenir timeout e custo excessivo de token |
+| Alta | Chunking/sumarização por etapas | Reduzir ainda mais risco de timeout em conversas muito extensas |
 | Média | Web Worker para parsing | Evitar travamento em arquivos > 2 MB |
 | Baixa | Paginação/virtualização das listas | Somente necessário se listas > 100 itens |
 | Baixa | Cache de análise em sessionStorage | UX para reload acidental (requer política de privacidade) |

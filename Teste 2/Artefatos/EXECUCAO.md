@@ -131,3 +131,6 @@ npm run build
 - O Playwright sobe a aplicação automaticamente via `webServer` em `playwright.config.ts`; não é necessário rodar `npm start` antes dos E2E (incluindo CI).
 - Node.js 20.x recomendado; o projeto declara `engines` para a faixa 20.x.
 - O arquivo `package-lock.json` está preservado para reprodutibilidade.
+- Os testes automatizados usam mocks da Z.AI; por isso validam a aplicação de forma determinística e isolam a avaliação de instabilidades do provedor externo.
+- Em uso real com token válido, a aplicação faz limpeza de ruído do chat e uma única retentativa automática curta para falhas rápidas; ainda assim, timeout, latência alta e rate limit dependem da Z.AI e não podem ser totalmente evitados no frontend.
+- Rate limit e indisponibilidades transitórias foram mapeados e tratados na UI com mensagens claras, cooldown curto e preservação do arquivo carregado para nova tentativa sem fricção.

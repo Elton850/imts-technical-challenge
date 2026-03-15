@@ -3,6 +3,7 @@
 Aplicacao Angular do **Teste 2** para analise de conversas WhatsApp via API Z.AI, com dashboard de KPIs, sentimento, tarefas, prazos, riscos e conflitos.
 
 A interface orienta o usuario sobre latencia esperada, falhas temporarias e retentativa quando o processamento externo oscila, incluindo margem segura de cerca de 3 segundos antes de uma nova tentativa.
+A integracao tambem reduz ruido de conversas longas e faz uma unica retentativa automatica curta para falhas rapidas; mesmo assim, latencia elevada, timeout e rate limit continuam dependendo do provedor externo Z.AI.
 
 ## Pre-requisitos
 

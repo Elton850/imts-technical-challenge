@@ -25,6 +25,8 @@ Entregar a aplicacao **AI Chat Insights (WhatsAnalizer)** conforme a especificac
 - **CI dedicado do Teste 2** — workflow em GitHub Actions para `build`, testes unitarios headless e E2E.
 - **Aviso de privacidade** — a UI informa explicitamente que o conteudo da conversa e enviado para a Z.AI.
 - **Orientacao de processamento** — a UI explica que a analise depende de provedor externo, pode levar ate 2,5 min e recomenda retentativa com janela segura de cerca de 3 segundos.
+- **Reducao conservadora de contexto** — conversas longas passam por limpeza de ruido e recorte controlado para priorizar trechos recentes e acionaveis, reduzindo latencia e risco de timeout.
+- **Retentativa automatica enxuta** — a aplicacao tenta recuperar uma vez falhas transitórias rapidas sem mascarar rate limit do provedor.
 - **Dashboard com contexto visual** — os resultados ficam agrupados em secoes nomeadas para leitura rapida de panorama e itens acionaveis.
 - **Exportacao de resumo** — a analise pode ser exportada em `.txt` sem token e sem conteudo bruto do chat.
 - **Testes unitarios + E2E** — cobertura do fluxo principal, erros, filtro, payload parcial e utilitarios centrais.
@@ -52,6 +54,8 @@ A aplicacao e os testes ficam em `app/`. Na pasta `Teste 2/app`:
 
 O token Z.AI deve ser informado **na interface**; nao commitar em arquivos. Detalhes em [`Artefatos/EXECUCAO.md`](./Artefatos/EXECUCAO.md).
 Versao recomendada de runtime: **Node 20 LTS**. Versoes superiores podem funcionar, mas a baseline validada do projeto e Node 20. Ha um arquivo `.nvmrc` em `Teste 2/app`.
+
+Observacao operacional: a aplicacao reduz o contexto enviado ao modelo e faz uma unica retentativa automatica curta para falhas transitórias rapidas. Ainda assim, timeout, latencia alta e rate limit podem acontecer por comportamento do provedor externo Z.AI e nao sao totalmente eliminaveis no frontend.
 
 Observacao sobre instalacao: use preferencialmente Node 20 LTS e `npm ci`. O projeto aceita Node 20+, e usa `audit=false` em `Teste 2/app/.npmrc` para evitar o resumo automatico de vulnerabilidades no `npm ci`, que pode ser ruidoso para dependencias transitivas de build/teste. Se quiser validar manualmente a arvore instalada, rode `npm audit`.
 

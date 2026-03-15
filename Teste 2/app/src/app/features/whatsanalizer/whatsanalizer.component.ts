@@ -18,7 +18,12 @@ import { MessageService } from 'primeng/api';
 import { ZaiAnalysisService } from '../../core/services/zai-analysis.service';
 import { AiAnalysisNormalized } from '../../core/models/ai-analysis.model';
 import { AppError } from '../../core/models/ui-state.model';
-import { ZAI_MODELS, DEFAULT_SYSTEM_PROMPT } from '../../core/constants/zai.constants';
+import {
+  ZAI_MODELS,
+  DEFAULT_SYSTEM_PROMPT,
+  ZAI_DEFAULT_MODEL,
+  ZAI_DEFAULT_TEMPERATURE,
+} from '../../core/constants/zai.constants';
 import { sentimentEmoji } from '../../core/utils/analysis-normalizer';
 import { readTextFile } from '../../core/utils/file-reader.util';
 
@@ -54,8 +59,8 @@ export class WhatsAnalizerComponent implements OnDestroy {
 
   // ─── Estado de entrada ─────────────────────────────────────────────────────
   readonly systemPrompt = signal<string>(DEFAULT_SYSTEM_PROMPT);
-  readonly selectedModel = signal<string>('glm-4.5-flash');
-  readonly temperature = signal<number>(0.7);
+  readonly selectedModel = signal<string>(ZAI_DEFAULT_MODEL);
+  readonly temperature = signal<number>(ZAI_DEFAULT_TEMPERATURE);
   readonly token = signal<string>('');
   readonly uploadedFile = signal<File | null>(null);
   readonly chatText = signal<string>('');
@@ -90,8 +95,8 @@ export class WhatsAnalizerComponent implements OnDestroy {
 
   readonly processingNoticeMessage = computed(() =>
     this.isLoading()
-      ? 'A análise depende do provedor externo Z.AI e pode levar até 2,5 minutos.'
-      : 'A análise depende do provedor externo Z.AI, pode levar até 2,5 minutos e pode oscilar por latência, timeout ou limite temporário de requisições.'
+      ? 'A análise depende do provedor externo Z.AI e pode levar até 2,5 minutos. Conversas longas são enxugadas automaticamente para priorizar trechos recentes e acionáveis.'
+      : 'A análise depende do provedor externo Z.AI, pode levar até 2,5 minutos e pode oscilar por latência, timeout ou limite temporário de requisições. Conversas longas são enxugadas automaticamente para priorizar trechos recentes e acionáveis.'
   );
 
   readonly retryGuidanceMessage = computed(() => {

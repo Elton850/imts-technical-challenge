@@ -1,11 +1,17 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
-import { Observable, TimeoutError, throwError } from 'rxjs';
-import { catchError, map, timeout } from 'rxjs/operators';
-import { ZAI_API_URL, ZAI_TIMEOUT_MS } from '../constants/zai.constants';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, TimeoutError, throwError, timer } from 'rxjs';
+import { catchError, map, retry, timeout } from 'rxjs/operators';
+import {
+  ZAI_API_URL,
+  ZAI_TIMEOUT_MS,
+  ZAI_AUTO_RETRY_ATTEMPTS,
+  ZAI_AUTO_RETRY_DELAY_MS,
+} from '../constants/zai.constants';
 import { SKIP_AUTH, SKIP_GLOBAL_LOADING } from '../interceptors/zai.interceptor';
 import { mapHttpError } from '../utils/error-mapper';
 import { normalizeAnalysis } from '../utils/analysis-normalizer';
+import { prepareChatForAnalysis } from '../utils/chat-preprocessor.util';
 import { AiAnalysisNormalized } from '../models/ai-analysis.model';
 import { AppError } from '../models/ui-state.model';
 
@@ -33,11 +39,12 @@ export class ZaiAnalysisService {
     temperature: number,
     token: string
   ): Observable<AiAnalysisNormalized> {
+    const preparedChat = prepareChatForAnalysis(chatText);
     const payload: ZaiRequestPayload = {
       model,
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: chatText },
+        { role: 'user', content: preparedChat.content },
       ],
       temperature,
       stream: false,
@@ -57,6 +64,11 @@ export class ZaiAnalysisService {
     return this.http.post<unknown>(ZAI_API_URL, payload, { headers, context }).pipe(
       timeout(ZAI_TIMEOUT_MS),
       map((response) => this.extractAndNormalize(response)),
+      retry({
+        count: ZAI_AUTO_RETRY_ATTEMPTS,
+        delay: (err: unknown) =>
+          shouldAutoRetry(err) ? timer(ZAI_AUTO_RETRY_DELAY_MS) : throwError(() => err),
+      }),
       catchError((err: unknown) => {
         if (err instanceof TimeoutError) {
           return throwError(() => ({ type: 'timeout' as const, message: 'A análise demorou mais que o esperado (2,5 min). Tente novamente com um arquivo menor.' }));
@@ -101,4 +113,16 @@ function isAppError(value: unknown): value is AppError {
     'message' in value &&
     typeof (value as AppError).message === 'string'
   );
+}
+
+function shouldAutoRetry(error: unknown): boolean {
+  if (isAppError(error)) {
+    return error.type === 'parse_error';
+  }
+
+  if (error instanceof HttpErrorResponse) {
+    return error.status === 0 || error.status === 408 || error.status >= 500;
+  }
+
+  return false;
 }
