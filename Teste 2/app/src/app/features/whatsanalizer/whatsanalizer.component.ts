@@ -215,4 +215,51 @@ export class WhatsAnalizerComponent implements OnInit {
     this.requestError.set(null);
     this.selectedParticipant.set('');
   }
+
+  /**
+   * Exporta resumo da análise para um arquivo .txt local (seguro: sem token, sem conteúdo do chat).
+   */
+  exportSummary(): void {
+    const a = this.analysis();
+    if (!a) return;
+
+    const lines: string[] = [
+      '=== WhatsAnalizer - Resumo da Análise ===',
+      '',
+      'Resumo executivo:',
+      a.resumo,
+      '',
+      `Sentimento: ${a.indicadores.sentimento}/10`,
+      a.sentimentoDescricao,
+      '',
+      'Indicadores:',
+      `  Envolvidos: ${a.indicadores.envolvidos}`,
+      `  Tarefas: ${a.indicadores.tarefas}`,
+      `  Prazos: ${a.indicadores.prazos}`,
+      `  Riscos: ${a.indicadores.riscos}`,
+      `  Conflitos: ${a.indicadores.conflitos}`,
+      '',
+      'Participantes: ' + a.participantes.join(', '),
+      '',
+      '--- Tarefas ---',
+      ...a.tarefas.map((t) => `- ${t.descricao} (${t.envolvido}, ${t.prioridade})`),
+      '',
+      '--- Prazos ---',
+      ...a.prazos.map((p) => `- ${p.descricao} | ${p.data} (${p.envolvido})`),
+      '',
+      '--- Riscos ---',
+      ...a.riscos.map((r) => `- ${r.descricao} (${r.envolvido})`),
+      '',
+      '--- Conflitos ---',
+      ...a.conflitos.map((c) => `- ${c.descricao} (${c.envolvido})`),
+    ];
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = `whatsanalizer-resumo-${new Date().toISOString().slice(0, 10)}.txt`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
 }

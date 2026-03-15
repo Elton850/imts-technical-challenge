@@ -34,9 +34,9 @@ Validar o formulario "Correcao de Valores" da Calculadora do Cidadao (BCB), cobr
 
 ## Achados de produto durante execucao
 
-| ID | Campo | Comportamento Observado | Expectativa Original | Recomendacao |
-|---|---|---|---|---|
-| ACH-01 | valorCorrecao | Campo e opcional; sistema processa sem valor informado | Erro de obrigatoriedade esperado | Adicionar validacao de obrigatoriedade ou tornar campo claramente opcional |
+| ID | Campo | Comportamento Observado | Expectativa Original | Risco / Impacto | Recomendacao |
+|---|---|---|---|---|---|
+| ACH-01 | valorCorrecao | Campo e opcional; sistema processa sem valor informado | Erro de obrigatoriedade esperado | Usuario pode receber resultado sem contexto (valor vazio = 0), gerando confusao ou decisao errada. | Adicionar validacao de obrigatoriedade ou tornar campo claramente opcional |
 
 ## Roteiro de automacao (5 obrigatorios + extras)
 

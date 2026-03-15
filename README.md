@@ -4,6 +4,8 @@
 
 # Entrega Técnica IMTS
 
+[![Teste 1 - Playwright E2E](https://github.com/IMTS/repo/actions/workflows/teste1-playwright.yml/badge.svg)](https://github.com/IMTS/repo/actions/workflows/teste1-playwright.yml) *(substitua `IMTS/repo` pela URL real do repositório para ativar o badge)*
+
 Repositório com os dois desafios técnicos entregues: automação E2E (Teste 1) e desenvolvimento da aplicação AI Chat Insights (Teste 2), com artefatos de QA e testes Playwright.
 
 ## Estrutura

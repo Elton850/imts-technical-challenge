@@ -125,12 +125,14 @@ A implementação seguiu a sequência: fundação técnica → arquitetura de es
 
 ## 6. Melhorias e trade-offs
 
-**Se tivesse mais tempo, priorizaria:**
-1. **Aviso de privacidade** — o usuário precisa saber que o conteúdo da conversa é enviado à Z.AI
-2. **Exportação do dashboard** — maior valor percebido pelo usuário
-3. **ReactiveFormsModule** — tipagem mais forte e validação mais expressiva no painel esquerdo
+**Já implementado (incl. nesta entrega):**
+1. **Aviso de privacidade** — exibido quando há arquivo e token preenchidos; informa que o conteúdo é enviado à Z.AI e orienta a não usar dados sensíveis.
+2. **Exportação do resumo** — botão "Exportar resumo (.txt)" no card do resumo executivo; gera arquivo local com resumo, sentimento, KPIs e listas (sem token, sem conteúdo bruto do chat).
+3. **Empty state** — mensagem de que os dados não são armazenados no aplicativo; loading com hint "Isso pode levar até 2,5 min".
 
 **Já implementado em sessões posteriores:** testes unitários para `analysis-normalizer.ts`, `error-mapper.ts`, `file-reader.util.ts`, `zai-analysis.service.ts` e interceptor Z.AI; webServer no Playwright para execução autônoma dos E2E.
+
+**Se tivesse mais tempo, priorizaria:** ReactiveFormsModule para tipagem e validação mais expressiva no painel esquerdo.
 
 **Trade-offs conscientes:**
 - Sem retry automático → evita custo de token em falhas transitórias

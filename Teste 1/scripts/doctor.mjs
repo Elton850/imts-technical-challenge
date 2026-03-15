@@ -4,9 +4,14 @@
  * Emite avisos sem bloquear: Node 24+ e outros fatores de risco.
  * Em caso de spawn EPERM no Windows, usar Node 20 (nvm use ou LTS).
  */
+import os from 'os';
+import path from 'path';
+
 const nodeMajor = Number(process.versions.node.split('.')[0]);
 const cwd = process.cwd();
 const warnings = [];
+
+console.log('[doctor] Node ' + process.versions.node + ' | Verificando ambiente...');
 
 // Node 18-20 recomendado; Node 24+ pode causar spawn EPERM ao lancar Chromium no Windows
 if (nodeMajor < 18 || nodeMajor >= 21) {
@@ -32,4 +37,9 @@ if (warnings.length > 0) {
 } else {
   console.log('[doctor] Ambiente OK.');
 }
+
+const reportDir = path.join(os.tmpdir(), 'imts-teste1-playwright', 'report');
+console.log('[doctor] Primeira execucao? Rode: npm run test:verify');
+console.log('[doctor] Apos os testes, relatorio HTML (local): ' + reportDir);
+console.log('[doctor] Para abrir o relatorio: npm run test:e2e:report');
 process.exit(0);

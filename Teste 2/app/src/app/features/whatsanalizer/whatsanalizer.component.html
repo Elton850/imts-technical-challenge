@@ -38,7 +38,7 @@
 
       <!-- Modelo -->
       <div class="field">
-        <label for="modelSelect" class="field-label">Modelo</label>
+        <span class="field-label">Modelo</span>
         <p-select
           inputId="modelSelect"
           [options]="models"
@@ -75,7 +75,7 @@
 
       <!-- Token Z.AI -->
       <div class="field">
-        <label for="tokenInput" class="field-label">Token Z.AI</label>
+        <span class="field-label">Token Z.AI</span>
         <p-password
           inputId="tokenInput"
           [ngModel]="token()"
@@ -133,10 +133,21 @@
       </div>
     </section>
 
+    <!-- Aviso de privacidade (antes de enviar à IA) -->
+    @if (uploadedFile() && token()) {
+      <div class="privacy-notice" role="note" data-testid="privacy-notice" aria-label="Aviso de privacidade">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        <p>
+          O conteúdo da conversa será enviado ao provedor <strong>Z.AI</strong> para análise.
+          Não use dados sensíveis se não quiser que sejam processados externamente.
+        </p>
+      </div>
+    }
+
     <!-- Erro de arquivo ou token -->
     @if (requestError()) {
       <div class="error-banner" role="alert" data-testid="error-banner">
-        <i class="pi pi-exclamation-triangle"></i>
+        <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
         <span>{{ requestError()!.message }}</span>
       </div>
     }
@@ -180,6 +191,7 @@
           <li>Informe o token Z.AI</li>
           <li>Clique em Enviar para Análise</li>
         </ol>
+        <p class="empty-state-privacy">Seus dados não são armazenados neste aplicativo.</p>
       </div>
     }
 
@@ -187,7 +199,8 @@
     @if (isLoading()) {
       <div class="loading-state" data-testid="loading-state" role="status" aria-live="polite" aria-busy="true">
         <i class="pi pi-spin pi-spinner loading-spinner" aria-hidden="true"></i>
-        <p>Analisando conversa com IA...</p>
+        <p class="loading-title">Analisando conversa com IA...</p>
+        <p class="loading-hint-dash">Isso pode levar até 2,5 min. Aguarde.</p>
       </div>
     }
 
@@ -219,14 +232,26 @@
           </div>
         </div>
 
-        <!-- Resumo Executivo -->
+        <!-- Resumo Executivo + Exportar -->
         <p-card styleClass="dashboard-card" data-testid="resumo-card">
           <ng-template pTemplate="header">
             <div class="card-header">
               <h3>📋 Resumo Executivo</h3>
             </div>
           </ng-template>
-          <p class="resumo-text" data-testid="resumo-text">{{ analysis()!.resumo }}</p>
+          <div class="resumo-block">
+            <button
+              type="button"
+              class="export-summary-btn"
+              (click)="exportSummary()"
+              aria-label="Exportar resumo em arquivo .txt"
+              data-testid="export-summary-btn"
+            >
+              <i class="pi pi-download"></i>
+              <span>Exportar resumo (.txt)</span>
+            </button>
+            <p class="resumo-text" data-testid="resumo-text">{{ analysis()!.resumo }}</p>
+          </div>
         </p-card>
 
         <!-- Análise de Sentimento -->

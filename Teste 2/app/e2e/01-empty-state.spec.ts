@@ -25,6 +25,10 @@ test.describe('Cenário 1 – Estado vazio inicial', () => {
     await expect(page.locator('[data-testid="empty-state"]')).toContainText('.txt');
   });
 
+  test('deve exibir mensagem de que dados não são armazenados no app', async ({ page }) => {
+    await expect(page.locator('[data-testid="empty-state"]')).toContainText('não são armazenados');
+  });
+
   test('botão de análise deve estar desabilitado sem arquivo', async ({ page }) => {
     const btn = getAnalyzeButton(page);
     await expect(btn).toBeVisible();

@@ -36,6 +36,7 @@ Detalhes adicionais sobre cada item estão nas seções "Oportunidades de melhor
 1. **Validacao de campo valor (achado da automacao)**
    - O campo "valor a ser corrigido" NAO valida obrigatoriedade no servidor.
    - O formulario aceita envio sem valor e processa sem erro.
+   - **Risco:** Usuario pode receber resultado monetario sem contexto (valor vazio = 0), gerando confusao ou decisao errada.
    - Recomendacao: tornar o campo obrigatorio com mensagem clara, ou indicar explicitamente que o campo e opcional (com valor default de 0).
 
 2. **UX de validacao**

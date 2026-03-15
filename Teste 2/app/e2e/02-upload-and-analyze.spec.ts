@@ -7,6 +7,13 @@ test.describe('Cenário 2 – Upload e análise com sucesso', () => {
     await navigateToApp(page);
   });
 
+  test('deve exibir aviso de privacidade ao ter arquivo e token preenchidos', async ({ page }) => {
+    await fillTokenAndUploadFile(page);
+    await expect(page.locator('[data-testid="privacy-notice"]')).toBeVisible();
+    await expect(page.locator('[data-testid="privacy-notice"]')).toContainText('Z.AI');
+    await expect(page.locator('[data-testid="privacy-notice"]')).toContainText('conteúdo da conversa');
+  });
+
   test('deve aceitar arquivo .txt e habilitar botão de análise', async ({ page }) => {
     await fillTokenAndUploadFile(page);
 
@@ -71,5 +78,20 @@ test.describe('Cenário 2 – Upload e análise com sucesso', () => {
     await expect(page.locator('[data-testid="prazos-card"]')).toBeVisible();
     await expect(page.locator('[data-testid="riscos-card"]')).toBeVisible();
     await expect(page.locator('[data-testid="conflitos-card"]')).toBeVisible();
+  });
+
+  test('deve exibir botão Exportar resumo e baixar .txt ao clicar', async ({ page }) => {
+    await fillTokenAndUploadFile(page);
+    await page.locator('[data-testid="analyze-btn"]').click();
+    await expect(page.locator('[data-testid="dashboard-content"]')).toBeVisible({ timeout: 15000 });
+
+    const exportBtn = page.locator('[data-testid="export-summary-btn"]');
+    await expect(exportBtn).toBeVisible({ timeout: 10000 });
+    await expect(exportBtn).toContainText('Exportar resumo');
+
+    const downloadPromise = page.waitForEvent('download', { timeout: 10000 });
+    await exportBtn.click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toMatch(/^whatsanalizer-resumo-\d{4}-\d{2}-\d{2}\.txt$/);
   });
 });
