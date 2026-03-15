@@ -1,0 +1,10 @@
+{
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "{\"resumo\":\"Conversa de planejamento entre Ana, Bruno e Carlos sobre o lançamento do produto X. Foram definidas tarefas, prazos e identificados riscos.\",\"indicadores\":{\"envolvidos\":3,\"tarefas\":3,\"prazos\":2,\"riscos\":2,\"conflitos\":1,\"sentimento\":7},\"sentimentoDescricao\":\"Clima majoritariamente positivo e colaborativo, com pequena tensão em torno de prazos apertados.\",\"participantes\":[\"Ana\",\"Bruno\",\"Carlos\"],\"tarefas\":[{\"descricao\":\"Finalizar documento de requisitos\",\"envolvido\":\"Ana\",\"prioridade\":\"alta\"},{\"descricao\":\"Preparar apresentação para o cliente\",\"envolvido\":\"Bruno\",\"prioridade\":\"media\"},{\"descricao\":\"Revisar budget do projeto\",\"envolvido\":\"Carlos\",\"prioridade\":\"alta\"}],\"prazos\":[{\"descricao\":\"Entrega do documento de requisitos\",\"data\":\"15/03/2026\",\"envolvido\":\"Ana\"},{\"descricao\":\"Apresentação ao cliente\",\"data\":\"20/03/2026\",\"envolvido\":\"Bruno\"}],\"riscos\":[{\"descricao\":\"Prazo apertado para entrega do documento\",\"envolvido\":\"Ana\"},{\"descricao\":\"Budget pode não cobrir todos os recursos necessários\",\"envolvido\":\"Carlos\"}],\"conflitos\":[{\"descricao\":\"Divergência sobre escopo das funcionalidades a serem entregues\",\"envolvido\":\"Bruno\"}]}"
+      }
+    }
+  ]
+}

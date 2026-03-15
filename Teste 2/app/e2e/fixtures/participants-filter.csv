@@ -1,0 +1,5 @@
+participant,expectedTarefas,expectedPrazos,expectedRiscos,expectedConflitos
+Ana,1,1,1,0
+Bruno,1,1,0,1
+Carlos,1,0,1,0
+,3,2,2,1

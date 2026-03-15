@@ -1,0 +1,12 @@
+09/03/2026, 09:00 - Ana: Bom dia pessoal! Vamos alinhar o projeto X?
+09/03/2026, 09:01 - Bruno: Oi Ana! Sim, tenho alguns pontos pra discutir.
+09/03/2026, 09:02 - Carlos: Oi! Pode começar.
+09/03/2026, 09:03 - Ana: Preciso finalizar o documento de requisitos até sexta (15/03).
+09/03/2026, 09:04 - Bruno: Preciso da apresentação pronta até quarta (20/03) para mostrar ao cliente.
+09/03/2026, 09:05 - Carlos: O budget está apertado. Precisamos revisar os recursos.
+09/03/2026, 09:06 - Ana: Entendido. Vou priorizar o documento.
+09/03/2026, 09:07 - Bruno: Mas o escopo ainda não está definido! Isso é um risco.
+09/03/2026, 09:08 - Carlos: Concordo com Bruno. Precisamos alinhar o escopo antes de fechar tudo.
+09/03/2026, 09:09 - Ana: Ok, vamos marcar reunião amanhã para definir o escopo.
+09/03/2026, 09:10 - Bruno: Perfeito!
+09/03/2026, 09:11 - Carlos: 👍

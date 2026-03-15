@@ -1,0 +1,383 @@
+<p-toast></p-toast>
+
+<!-- ════════════════ HEADER ════════════════ -->
+<header class="app-header" data-testid="app-header">
+  <div class="header-content">
+    <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+    <h1 class="header-title">AI Chat Insights</h1>
+    <span class="header-subtitle">WhatsAnalizer</span>
+  </div>
+</header>
+
+<!-- ════════════════ MAIN LAYOUT ════════════════ -->
+<main class="main-layout" data-testid="main-layout">
+
+  <!-- ─── COLUNA ESQUERDA: CALIBRAÇÃO ─── -->
+  <aside class="config-panel" data-testid="config-panel">
+
+    <section class="config-section">
+      <h2 class="section-title">Calibração da IA</h2>
+
+      <!-- System Prompt -->
+      <div class="field">
+        <label for="systemPrompt" class="field-label">System Prompt</label>
+        <textarea
+          id="systemPrompt"
+          pInputTextarea
+          [autoResize]="true"
+          [(ngModel)]="systemPrompt"
+          [ngModelOptions]="{standalone: true}"
+          rows="8"
+          class="w-full"
+          aria-label="System prompt para a IA"
+          data-testid="system-prompt-input"
+        ></textarea>
+      </div>
+
+      <!-- Modelo -->
+      <div class="field">
+        <label for="modelSelect" class="field-label">Modelo</label>
+        <p-select
+          inputId="modelSelect"
+          [options]="models"
+          [ngModel]="selectedModel()"
+          (ngModelChange)="selectedModel.set($event)"
+          [ngModelOptions]="{standalone: true}"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+          aria-label="Selecionar modelo de IA"
+          data-testid="model-select"
+        ></p-select>
+      </div>
+
+      <!-- Temperature -->
+      <div class="field">
+        <label class="field-label">Temperature: <strong>{{ temperature() | number:'1.1-1' }}</strong></label>
+        <p-slider
+          [ngModel]="temperature()"
+          (ngModelChange)="temperature.set($event)"
+          [ngModelOptions]="{standalone: true}"
+          [min]="0"
+          [max]="1"
+          [step]="0.1"
+          styleClass="w-full"
+          aria-label="Slider de temperatura da IA"
+          data-testid="temperature-slider"
+        ></p-slider>
+        <div class="slider-range-labels">
+          <span>Preciso</span>
+          <span>Criativo</span>
+        </div>
+      </div>
+
+      <!-- Token Z.AI -->
+      <div class="field">
+        <label for="tokenInput" class="field-label">Token Z.AI</label>
+        <p-password
+          inputId="tokenInput"
+          [ngModel]="token()"
+          (ngModelChange)="token.set($event)"
+          [ngModelOptions]="{standalone: true}"
+          [toggleMask]="true"
+          [feedback]="false"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+          placeholder="Cole seu token aqui"
+          aria-label="Token de acesso Z.AI"
+          data-testid="token-input"
+        ></p-password>
+        <small class="field-hint">O token não é armazenado nem enviado a terceiros.</small>
+      </div>
+    </section>
+
+    <!-- Upload -->
+    <section class="config-section">
+      <h2 class="section-title">Arquivo de Conversa</h2>
+
+      <div class="field">
+        <label class="field-label" for="fileInput">Histórico WhatsApp (.txt)</label>
+        <div class="file-upload-area" data-testid="file-upload-area">
+          @if (uploadedFile()) {
+            <div class="file-info" data-testid="file-info">
+              <i class="pi pi-file-o file-icon"></i>
+              <span class="file-name" data-testid="file-name">{{ uploadedFile()!.name }}</span>
+              <button
+                type="button"
+                class="file-remove-btn"
+                (click)="clearFile()"
+                aria-label="Remover arquivo"
+                data-testid="file-remove-btn"
+              >
+                <i class="pi pi-times"></i>
+              </button>
+            </div>
+          } @else {
+            <label for="fileInput" class="file-upload-label" data-testid="file-upload-label">
+              <i class="pi pi-upload upload-icon"></i>
+              <span>Clique para selecionar o arquivo .txt</span>
+            </label>
+          }
+          <input
+            id="fileInput"
+            type="file"
+            accept=".txt"
+            (change)="onFileSelected($event)"
+            class="file-input-hidden"
+            aria-label="Selecionar arquivo .txt do WhatsApp"
+            data-testid="file-input"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Erro de arquivo ou token -->
+    @if (requestError()) {
+      <div class="error-banner" role="alert" data-testid="error-banner">
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>{{ requestError()!.message }}</span>
+      </div>
+    }
+
+    <!-- Botão de Análise -->
+    <p-button
+      label="Enviar para Análise"
+      icon="pi pi-send"
+      styleClass="w-full analyze-btn"
+      [disabled]="!canAnalyze()"
+      [loading]="isLoading()"
+      (onClick)="analyze()"
+      aria-label="Enviar conversa para análise pela IA"
+      data-testid="analyze-btn"
+    ></p-button>
+
+    @if (isLoading()) {
+      <div class="loading-hint" data-testid="loading-hint">
+        <i class="pi pi-spin pi-spinner"></i>
+        A análise pode levar até 2,5 minutos...
+      </div>
+    }
+  </aside>
+
+  <!-- ─── COLUNA DIREITA: DASHBOARD ─── -->
+  <section class="dashboard-panel" data-testid="dashboard-panel" role="region" aria-label="Painel do dashboard de análise">
+
+    <!-- Empty State -->
+    @if (!hasAnalysis() && !isLoading()) {
+      <div class="empty-state" data-testid="empty-state" role="status" aria-label="Nenhuma análise carregada. Siga as instruções para enviar um arquivo e analisar.">
+        <div class="empty-state-icon">💬</div>
+        <h2 class="empty-state-title">Nenhuma análise carregada</h2>
+        <p class="empty-state-desc">
+          Selecione um arquivo <strong>.txt</strong> exportado do WhatsApp,
+          informe seu <strong>Token Z.AI</strong> e clique em
+          <strong>Enviar para Análise</strong>.
+        </p>
+        <ol class="empty-state-steps">
+          <li>Exporte a conversa no WhatsApp (<em>sem mídia</em>)</li>
+          <li>Carregue o arquivo <code>.txt</code> aqui</li>
+          <li>Informe o token Z.AI</li>
+          <li>Clique em Enviar para Análise</li>
+        </ol>
+      </div>
+    }
+
+    <!-- Loading state -->
+    @if (isLoading()) {
+      <div class="loading-state" data-testid="loading-state" role="status" aria-live="polite" aria-busy="true">
+        <i class="pi pi-spin pi-spinner loading-spinner" aria-hidden="true"></i>
+        <p>Analisando conversa com IA...</p>
+      </div>
+    }
+
+    <!-- Dashboard com resultado -->
+    @if (hasAnalysis() && !isLoading()) {
+      <div class="dashboard-content" data-testid="dashboard-content">
+
+        <!-- KPIs -->
+        <div class="kpi-grid" data-testid="kpi-grid">
+          <div class="kpi-card" data-testid="kpi-envolvidos">
+            <span class="kpi-number">{{ analysis()!.indicadores.envolvidos }}</span>
+            <span class="kpi-label">Envolvidos</span>
+          </div>
+          <div class="kpi-card" data-testid="kpi-tarefas">
+            <span class="kpi-number">{{ analysis()!.indicadores.tarefas }}</span>
+            <span class="kpi-label">Tarefas</span>
+          </div>
+          <div class="kpi-card" data-testid="kpi-prazos">
+            <span class="kpi-number">{{ analysis()!.indicadores.prazos }}</span>
+            <span class="kpi-label">Prazos</span>
+          </div>
+          <div class="kpi-card" data-testid="kpi-riscos">
+            <span class="kpi-number">{{ analysis()!.indicadores.riscos }}</span>
+            <span class="kpi-label">Riscos</span>
+          </div>
+          <div class="kpi-card" data-testid="kpi-conflitos">
+            <span class="kpi-number">{{ analysis()!.indicadores.conflitos }}</span>
+            <span class="kpi-label">Conflitos</span>
+          </div>
+        </div>
+
+        <!-- Resumo Executivo -->
+        <p-card styleClass="dashboard-card" data-testid="resumo-card">
+          <ng-template pTemplate="header">
+            <div class="card-header">
+              <h3>📋 Resumo Executivo</h3>
+            </div>
+          </ng-template>
+          <p class="resumo-text" data-testid="resumo-text">{{ analysis()!.resumo }}</p>
+        </p-card>
+
+        <!-- Análise de Sentimento -->
+        <p-card styleClass="dashboard-card" data-testid="sentimento-card">
+          <ng-template pTemplate="header">
+            <div class="card-header">
+              <h3 data-testid="sentimento-title">{{ sentimentTitle() }}</h3>
+            </div>
+          </ng-template>
+          <p data-testid="sentimento-desc">{{ analysis()!.sentimentoDescricao }}</p>
+        </p-card>
+
+        <!-- Envolvidos -->
+        <p-card styleClass="dashboard-card" data-testid="participantes-card">
+          <ng-template pTemplate="header">
+            <div class="card-header">
+              <h3>👥 Envolvidos</h3>
+            </div>
+          </ng-template>
+          <div class="chips-container" data-testid="participantes-chips">
+            @for (p of analysis()!.participantes; track p) {
+              <p-chip [label]="p" styleClass="participant-chip"></p-chip>
+            } @empty {
+              <span class="empty-chips">Nenhum participante identificado.</span>
+            }
+          </div>
+        </p-card>
+
+        <!-- Filtro por Participante -->
+        <div class="filter-row" data-testid="filter-row">
+          <label for="participantFilter" class="filter-label">Filtrar por participante:</label>
+          <p-select
+            inputId="participantFilter"
+            [options]="participantOptions()"
+            [ngModel]="selectedParticipant()"
+            (ngModelChange)="selectedParticipant.set($event)"
+            [ngModelOptions]="{standalone: true}"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="filter-select"
+            aria-label="Filtrar listas por participante"
+            data-testid="participant-filter"
+          ></p-select>
+        </div>
+
+        <!-- Listas: Tarefas e Prazos -->
+        <div class="lists-grid" data-testid="lists-grid">
+
+          <!-- Tarefas -->
+          <p-card styleClass="dashboard-card list-card" data-testid="tarefas-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <h3>
+                  ✅ Tarefas
+                  <span class="badge-count" data-testid="tarefas-badge">{{ filteredTarefas().length }}</span>
+                </h3>
+              </div>
+            </ng-template>
+            @for (t of filteredTarefas(); track t.descricao) {
+              <div class="list-item" data-testid="tarefa-item">
+                <div class="list-item-desc">{{ t.descricao }}</div>
+                <div class="list-item-meta">
+                  @if (t.envolvido) {
+                    <span class="meta-person">👤 {{ t.envolvido }}</span>
+                  }
+                  <p-tag
+                    [value]="t.prioridade || 'media'"
+                    [severity]="prioridadeSeverity(t.prioridade)"
+                  ></p-tag>
+                </div>
+              </div>
+            } @empty {
+              <span class="list-empty" data-testid="tarefas-empty">Nenhuma tarefa encontrada.</span>
+            }
+          </p-card>
+
+          <!-- Prazos -->
+          <p-card styleClass="dashboard-card list-card" data-testid="prazos-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <h3>
+                  📅 Prazos
+                  <span class="badge-count" data-testid="prazos-badge">{{ filteredPrazos().length }}</span>
+                </h3>
+              </div>
+            </ng-template>
+            @for (p of filteredPrazos(); track p.descricao) {
+              <div class="list-item" data-testid="prazo-item">
+                <div class="list-item-desc">{{ p.descricao }}</div>
+                <div class="list-item-meta">
+                  @if (p.data) { <span class="meta-date">📆 {{ p.data }}</span> }
+                  @if (p.envolvido) { <span class="meta-person">👤 {{ p.envolvido }}</span> }
+                </div>
+              </div>
+            } @empty {
+              <span class="list-empty" data-testid="prazos-empty">Nenhum prazo encontrado.</span>
+            }
+          </p-card>
+
+          <!-- Riscos -->
+          <p-card styleClass="dashboard-card list-card" data-testid="riscos-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <h3>
+                  ⚠️ Riscos
+                  <span class="badge-count badge-warning" data-testid="riscos-badge">{{ filteredRiscos().length }}</span>
+                </h3>
+              </div>
+            </ng-template>
+            @for (r of filteredRiscos(); track r.descricao) {
+              <div class="list-item" data-testid="risco-item">
+                <div class="list-item-desc">{{ r.descricao }}</div>
+                @if (r.envolvido) {
+                  <div class="list-item-meta">
+                    <span class="meta-person">👤 {{ r.envolvido }}</span>
+                  </div>
+                }
+              </div>
+            } @empty {
+              <span class="list-empty" data-testid="riscos-empty">Nenhum risco encontrado.</span>
+            }
+          </p-card>
+
+          <!-- Conflitos -->
+          <p-card styleClass="dashboard-card list-card" data-testid="conflitos-card">
+            <ng-template pTemplate="header">
+              <div class="card-header">
+                <h3>
+                  🔥 Conflitos
+                  <span class="badge-count badge-danger" data-testid="conflitos-badge">{{ filteredConflitos().length }}</span>
+                </h3>
+              </div>
+            </ng-template>
+            @for (c of filteredConflitos(); track c.descricao) {
+              <div class="list-item" data-testid="conflito-item">
+                <div class="list-item-desc">{{ c.descricao }}</div>
+                @if (c.envolvido) {
+                  <div class="list-item-meta">
+                    <span class="meta-person">👤 {{ c.envolvido }}</span>
+                  </div>
+                }
+              </div>
+            } @empty {
+              <span class="list-empty" data-testid="conflitos-empty">Nenhum conflito encontrado.</span>
+            }
+          </p-card>
+
+        </div><!-- /lists-grid -->
+
+      </div><!-- /dashboard-content -->
+    }
+
+  </section>
+</main>

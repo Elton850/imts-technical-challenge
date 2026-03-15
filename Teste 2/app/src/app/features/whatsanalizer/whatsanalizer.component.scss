@@ -1,0 +1,489 @@
+// ─── Variáveis de tema WhatsApp ───────────────────────────────────────────
+$wa-green: #25d366;
+$wa-dark-green: #075e54;
+$wa-bg: #e5ddd5;
+$wa-white: #ffffff;
+$wa-text: #303030;
+$wa-muted: #667781;
+$wa-border: #dadde1;
+$wa-card-bg: #ffffff;
+$wa-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+// ─── Header ──────────────────────────────────────────────────────────────
+.app-header {
+  background: $wa-dark-green;
+  color: $wa-white;
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .whatsapp-icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    letter-spacing: -0.3px;
+  }
+
+  .header-subtitle {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    font-style: italic;
+  }
+}
+
+// ─── Layout Principal ─────────────────────────────────────────────────────
+.main-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  min-height: calc(100vh - 57px);
+  background: $wa-bg;
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+// ─── Coluna Esquerda ─────────────────────────────────────────────────────
+.config-panel {
+  background: $wa-card-bg;
+  border-right: 1px solid $wa-border;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 57px;
+  height: calc(100vh - 57px);
+  overflow-y: auto;
+
+  .config-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $wa-dark-green;
+    margin: 0 0 4px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid $wa-green;
+  }
+}
+
+// ─── Campos de formulário ─────────────────────────────────────────────────
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $wa-text;
+}
+
+.field-hint {
+  font-size: 0.75rem;
+  color: $wa-muted;
+}
+
+.slider-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: $wa-muted;
+  margin-top: 2px;
+}
+
+// ─── Upload ────────────────────────────────────────────────────────────────
+.file-upload-area {
+  border: 2px dashed $wa-border;
+  border-radius: 8px;
+  padding: 12px;
+  transition: border-color 0.2s;
+  cursor: pointer;
+  background: #f7f7f7;
+
+  &:hover {
+    border-color: $wa-green;
+  }
+}
+
+.file-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: $wa-muted;
+  font-size: 0.875rem;
+  padding: 8px;
+  user-select: none;
+}
+
+.upload-icon {
+  font-size: 1.8rem;
+  color: $wa-green;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+}
+
+.file-icon {
+  font-size: 1.2rem;
+  color: $wa-dark-green;
+}
+
+.file-name {
+  flex: 1;
+  font-size: 0.875rem;
+  color: $wa-text;
+  word-break: break-all;
+}
+
+.file-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #e74c3c;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: #ffeaea;
+  }
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+// ─── Erro ──────────────────────────────────────────────────────────────────
+.error-banner {
+  background: #fff3f3;
+  border: 1px solid #e74c3c;
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 0.875rem;
+  color: #c0392b;
+
+  i { flex-shrink: 0; margin-top: 2px; }
+}
+
+// ─── Botão ─────────────────────────────────────────────────────────────────
+:host ::ng-deep .analyze-btn.p-button {
+  background: $wa-green;
+  border-color: $wa-green;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  &:not(:disabled):hover {
+    background: darken(#25d366, 8%);
+    border-color: darken(#25d366, 8%);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+  }
+}
+
+.loading-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: $wa-muted;
+  justify-content: center;
+}
+
+// ─── Dashboard ────────────────────────────────────────────────────────────
+.dashboard-panel {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+// ─── Empty State ─────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  color: $wa-muted;
+  padding: 32px;
+
+  .empty-state-icon { font-size: 4rem; margin-bottom: 16px; }
+  .empty-state-title { font-size: 1.4rem; font-weight: 600; color: $wa-dark-green; margin-bottom: 12px; }
+  .empty-state-desc { max-width: 420px; line-height: 1.6; margin-bottom: 20px; font-size: 0.95rem; }
+  .empty-state-steps {
+    list-style: decimal;
+    text-align: left;
+    background: $wa-card-bg;
+    padding: 16px 20px 16px 36px;
+    border-radius: 8px;
+    border: 1px solid $wa-border;
+    line-height: 2;
+    font-size: 0.9rem;
+  }
+}
+
+// ─── Loading state ────────────────────────────────────────────────────────
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  color: $wa-dark-green;
+
+  .loading-spinner { font-size: 3rem; }
+}
+
+// ─── Dashboard Content ────────────────────────────────────────────────────
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// ─── KPI Grid ─────────────────────────────────────────────────────────────
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.kpi-card {
+  background: $wa-card-bg;
+  border-radius: 10px;
+  padding: 20px 12px;
+  text-align: center;
+  box-shadow: $wa-shadow;
+  border-top: 3px solid $wa-green;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  .kpi-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $wa-dark-green;
+    line-height: 1;
+  }
+
+  .kpi-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: $wa-muted;
+    font-weight: 600;
+  }
+}
+
+// ─── Cards ────────────────────────────────────────────────────────────────
+:host ::ng-deep .dashboard-card.p-card {
+  box-shadow: $wa-shadow;
+  border-radius: 10px;
+
+  .p-card-header {
+    padding: 12px 16px 0;
+  }
+
+  .p-card-body {
+    padding: 12px 16px 16px;
+  }
+
+  .p-card-content {
+    padding: 0;
+  }
+}
+
+.card-header {
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $wa-dark-green;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.resumo-text {
+  line-height: 1.6;
+  color: $wa-text;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+// ─── Chips ────────────────────────────────────────────────────────────────
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+:host ::ng-deep .participant-chip.p-chip {
+  background: $wa-green;
+  color: $wa-white;
+  font-size: 0.85rem;
+}
+
+.empty-chips {
+  font-size: 0.875rem;
+  color: $wa-muted;
+}
+
+// ─── Filtro ───────────────────────────────────────────────────────────────
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.filter-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $wa-text;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .filter-select {
+  min-width: 200px;
+}
+
+// ─── Badge contador ───────────────────────────────────────────────────────
+.badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  border-radius: 11px;
+  background: $wa-green;
+  color: $wa-white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+.badge-warning { background: #e67e22; }
+.badge-danger { background: #e74c3c; }
+
+// ─── Listas ───────────────────────────────────────────────────────────────
+.lists-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.list-item {
+  padding: 10px 0;
+  border-bottom: 1px solid $wa-border;
+
+  &:last-child { border-bottom: none; }
+
+  .list-item-desc {
+    font-size: 0.9rem;
+    color: $wa-text;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+
+  .list-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .meta-person, .meta-date {
+    font-size: 0.75rem;
+    color: $wa-muted;
+  }
+}
+
+.list-empty {
+  display: block;
+  font-size: 0.875rem;
+  color: $wa-muted;
+  text-align: center;
+  padding: 16px 0;
+}
+
+// ─── Responsividade ──────────────────────────────────────────────────────
+@media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .config-panel {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid $wa-border;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lists-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  :host ::ng-deep .filter-select {
+    width: 100%;
+    min-width: unset;
+  }
+}

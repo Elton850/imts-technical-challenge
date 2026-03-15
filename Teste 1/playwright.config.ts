@@ -1,3 +1,7 @@
+/**
+ * Configuração Playwright para o Teste 1 (Calculadora do Cidadão).
+ * Local: artefatos em diretório temporário para evitar EPERM no Windows/OneDrive.
+ */
 import os from 'os';
 import path from 'path';
 import { defineConfig, devices } from '@playwright/test';

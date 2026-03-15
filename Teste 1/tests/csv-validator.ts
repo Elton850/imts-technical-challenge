@@ -27,6 +27,7 @@ export interface ResultadoValidacao {
 /**
  * Valida o arquivo CSV e retorna resultado estruturado.
  * ok: true quando valido; ok: false com erro e detalhes quando ha problema.
+ * csvPath: use apenas caminhos confiáveis (dados de teste); não passar entrada de usuário.
  */
 export function validarMassaCSV(csvPath?: string): ResultadoValidacao {
   const basePath = csvPath ?? path.join(__dirname, '..', 'data', 'massa-correcao.csv');

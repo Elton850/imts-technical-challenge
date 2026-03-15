@@ -1,0 +1,31 @@
+/* PrimeNG 18 - Icons */
+@import "primeicons/primeicons.css";
+
+/* Global reset e base */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: #e5ddd5;
+  color: #303030;
+  font-size: 16px;
+}
+
+/* Utility */
+.w-full { width: 100%; }
+
+/* Acessibilidade: foco visível na navegação por teclado */
+:focus-visible {
+  outline: 2px solid #075e54;
+  outline-offset: 2px;
+}
+
+/* Scrollbar discreta */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #b0b0b0; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #888; }

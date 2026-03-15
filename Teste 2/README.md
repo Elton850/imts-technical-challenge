@@ -55,12 +55,23 @@ Aplicar estrategia de QA sobre a aplicacao desenvolvida na Etapa 1.
 - Especificacoes tecnicas: [`ESPECIFICACOES_TECNICAS.md`](./ESPECIFICACOES_TECNICAS.md)
 - Documento de entrega: [`Artefatos/DOCUMENTO_ENTREGA.md`](./Artefatos/DOCUMENTO_ENTREGA.md)
 
-## Estrutura esperada
+## Estrutura
 
 - `README.md` (este arquivo)
-- `Artefatos/CENARIOS.md`
-- `Artefatos/PERFORMANCE.md`
-- `Artefatos/PRODUTO.md`
-- `Artefatos/EXECUCAO.md`
-- `Artefatos/RETROSPECTIVA.md`
-- `Artefatos/DOCUMENTO_ENTREGA.md`
+- `ESPECIFICACOES_TECNICAS.md`
+- `Artefatos/` — CENARIOS.md, PERFORMANCE.md, PRODUTO.md, EXECUCAO.md, RETROSPECTIVA.md, DOCUMENTO_ENTREGA.md
+- `app/` — aplicação Angular (código-fonte e testes E2E)
+
+## Como executar
+
+A aplicação e os testes ficam em `app/`. Na pasta `Teste 2/app`:
+
+| Ação | Comando |
+|------|---------|
+| Instalar dependências | `npm install` |
+| Instalar browser (1ª vez) | `npx playwright install chromium` |
+| Subir a aplicação | `npm start` → http://localhost:4200/whatsanalizer |
+| Build | `npm run build` |
+| Testes E2E | `npm run test:e2e` ou `npm run test:headless` |
+
+O token Z.AI deve ser informado **na interface**; não commitar em arquivos. Detalhes em [`Artefatos/EXECUCAO.md`](./Artefatos/EXECUCAO.md).
