@@ -67,7 +67,7 @@ npm run test:verify
 
 ```powershell
 cd ".\Teste 2\app"
-npm install
+npm ci
 npx playwright install chromium
 npm run build
 npx ng test --watch=false --browsers=ChromeHeadless
@@ -75,6 +75,7 @@ npm run test:e2e
 ```
 
 Para rodar a aplicacao do Teste 2 localmente: `npm start` (em `Teste 2/app`). A rota e `http://localhost:4200/whatsanalizer`.
+Para uma instalacao limpa e reprodutivel do Teste 2, prefira Node 20 LTS e `npm ci`. O projeto aceita Node 20+, mas a baseline validada no CI continua sendo Node 20. O projeto tambem desabilita o resumo automatico de `audit` no install para evitar contagem ruidosa de dependencias transitivas de tooling; se quiser validar manualmente a arvore instalada, rode `npm audit` em `Teste 2/app`.
 
 ## Diferenciais da entrega
 
@@ -111,7 +112,7 @@ npm run lint && npm run format:check && npm run test:verify
 
 # Teste 2 — build, unit e E2E
 cd "..\Teste 2\app"
-npm install
+npm ci
 npx playwright install chromium
 npm run build
 npx ng test --watch=false --browsers=ChromeHeadless

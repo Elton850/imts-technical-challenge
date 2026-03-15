@@ -43,7 +43,7 @@ A aplicacao e os testes ficam em `app/`. Na pasta `Teste 2/app`:
 
 | Acao | Comando |
 |------|---------|
-| Instalar dependencias | `npm install` |
+| Instalar dependencias | `npm ci` |
 | Instalar browser (1a vez) | `npx playwright install chromium` |
 | Subir a aplicacao | `npm start` -> `http://localhost:4200/whatsanalizer` |
 | Build | `npm run build` |
@@ -51,7 +51,9 @@ A aplicacao e os testes ficam em `app/`. Na pasta `Teste 2/app`:
 | Testes E2E | `npm run test:e2e` ou `npm run test:headless` |
 
 O token Z.AI deve ser informado **na interface**; nao commitar em arquivos. Detalhes em [`Artefatos/EXECUCAO.md`](./Artefatos/EXECUCAO.md).
-Versao recomendada de runtime: **Node 20**. Ha um arquivo `.nvmrc` em `Teste 2/app`.
+Versao recomendada de runtime: **Node 20 LTS**. Versoes superiores podem funcionar, mas a baseline validada do projeto e Node 20. Ha um arquivo `.nvmrc` em `Teste 2/app`.
+
+Observacao sobre instalacao: use preferencialmente Node 20 LTS e `npm ci`. O projeto aceita Node 20+, e usa `audit=false` em `Teste 2/app/.npmrc` para evitar o resumo automatico de vulnerabilidades no `npm ci`, que pode ser ruidoso para dependencias transitivas de build/teste. Se quiser validar manualmente a arvore instalada, rode `npm audit`.
 
 ## Arquivo pronto para avaliacao
 
@@ -72,7 +74,7 @@ Ele foi montado para gerar uma analise mais rica, com:
 Na pasta `Teste 2/app`:
 
 ```bash
-npm install
+npm ci
 npx playwright install chromium
 npm run build
 npx ng test --watch=false --browsers=ChromeHeadless

@@ -6,15 +6,16 @@ A interface orienta o usuario sobre latencia esperada, falhas temporarias e rete
 
 ## Pre-requisitos
 
-- Node.js 20.x (LTS recomendado)
+- Node.js 20+ (20 LTS recomendado e usado como baseline validada)
 - npm 9+
 
 Se usar `nvm`, rode `nvm use` dentro de `Teste 2/app`.
+Versoes superiores do Node podem funcionar, mas o projeto foi validado e mantido com Node 20 no CI.
 
 ## Fluxo local
 
 ```bash
-npm install
+npm ci
 npm start
 ```
 
@@ -50,6 +51,19 @@ npm run test:headless
 ```
 
 A configuracao sobe a aplicacao automaticamente (`webServer` no `playwright.config.ts`).
+
+## Observacao sobre `npm ci`, Node e `npm audit`
+
+Este projeto usa `audit=false` em `.npmrc` para evitar o resumo automatico de vulnerabilidades durante `npm ci`/`npm install`, porque o `npm` pode exibir uma contagem ruidosa ou inconsistente para dependencias transitivas de tooling mesmo quando o `npm audit` manual nao aponta vulnerabilidades abertas na arvore instalada.
+O projeto aceita Node 20+, mas a baseline validada da entrega continua sendo Node 20 LTS.
+
+Se quiser conferir manualmente, rode:
+
+```bash
+npm audit
+```
+
+Nao e recomendado executar `npm audit fix --force` durante a avaliacao, porque isso altera a arvore de dependencias validada do desafio.
 
 ## Token Z.AI
 
